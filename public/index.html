@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta id="og-title" property="og:title" content="마이타입 — 나를 알아가는 심리테스트">
+<meta id="og-desc" property="og:description" content="MBTI, 테토에겐, 오라, 연애, HSP, 직장인, 힐링 유형 테스트">
+<meta property="og:type" content="website">
+<title id="page-title">✨ 마이타입 — 나를 알아가는 심리테스트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #09090F; --card: rgba(255,255,255,0.05); --card-border: rgba(255,255,255,0.11);
+  --text: #F0EEFF; --muted: rgba(240,238,255,0.5); --pink: #FF3CAC; --purple: #A855F7;
+  --cyan: #22D3EE; --gold: #FBBF24; --green: #34D399;
+  --grad: linear-gradient(135deg, #FF3CAC, #A855F7, #22D3EE);
+  --r: 20px; --rs: 12px;
+  --fdisplay: 'Gowun Dodum', sans-serif; --fbody: 'Noto Sans KR', sans-serif;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--fbody); min-height: 100vh; overflow-x: hidden; }
+.orb { position: fixed; border-radius: 50%; filter: blur(90px); opacity: 0.22; pointer-events: none; z-index: 0; animation: float 10s ease-in-out infinite; }
+.o1 { width: 500px; height: 500px; background: #FF3CAC; top: -120px; left: -120px; }
+.o2 { width: 380px; height: 380px; background: #A855F7; top: 35%; right: -80px; animation-delay: 3.5s; }
+.o3 { width: 420px; height: 420px; background: #22D3EE; bottom: -100px; left: 20%; animation-delay: 7s; }
+@keyframes float { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-24px) scale(1.04); } }
+#app { position: relative; z-index: 1; max-width: 660px; margin: 0 auto; padding: 0 16px 80px; min-height: 100vh; }
+.screen { display: none; }
+.screen.active { display: block; }
+.site-header { text-align: center; padding: 48px 0 8px; }
+.site-logo { font-family: var(--fdisplay); font-size: 2.2rem; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -0.02em; }
+.site-tagline { color: var(--muted); font-size: 0.9rem; margin-top: 6px; }
+.sec-label { font-family: var(--fdisplay); font-size: 0.85rem; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin: 36px 0 14px; display: flex; align-items: center; gap: 10px; }
+.sec-label::after { content: ''; flex: 1; height: 1px; background: var(--card-border); }
+.tests-grid { display: flex; flex-direction: column; gap: 14px; }
+.test-card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--r); backdrop-filter: blur(24px); padding: 26px 22px; cursor: pointer; display: flex; align-items: center; gap: 18px; position: relative; overflow: hidden; transition: all 0.3s ease; }
+.test-card::before { content: ''; position: absolute; inset: 0; background: var(--tc-grad); opacity: 0; transition: opacity 0.3s; }
+.test-card:hover::before { opacity: 1; }
+.test-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.22); box-shadow: 0 24px 60px rgba(0,0,0,0.45); }
+.test-card:active { transform: translateY(-1px); }
+.tc-emoji { font-size: 2.8rem; flex-shrink: 0; position: relative; z-index: 1; }
+.tc-info { flex: 1; position: relative; z-index: 1; }
+.tc-name { font-family: var(--fdisplay); font-size: 1.15rem; margin-bottom: 5px; font-weight: 700; }
+.tc-desc { color: var(--muted); font-size: 0.82rem; line-height: 1.55; }
+.tc-count { font-size: 0.72rem; color: var(--muted); margin-top: 7px; }
+.tc-arrow { font-size: 1.4rem; flex-shrink: 0; opacity: 0.45; transition: all 0.3s; position: relative; z-index: 1; }
+.test-card:hover .tc-arrow { opacity: 1; transform: translateX(5px); }
+.q-header { display: flex; align-items: center; gap: 12px; padding: 28px 0 20px; }
+.back-btn { background: var(--card); border: 1px solid var(--card-border); border-radius: 50%; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.1rem; transition: all 0.2s; flex-shrink: 0; color: var(--text); }
+.back-btn:hover { background: rgba(255,255,255,0.1); }
+.q-test-name { font-size: 0.88rem; color: var(--muted); font-family: var(--fdisplay); }
+.prog-wrap { background: rgba(255,255,255,0.07); border-radius: 100px; height: 5px; overflow: hidden; margin-bottom: 32px; }
+.prog-fill { height: 100%; background: var(--grad); border-radius: 100px; transition: width 0.45s cubic-bezier(.4,0,.2,1); }
+.q-num { font-size: 0.78rem; color: var(--muted); margin-bottom: 10px; }
+.q-text { font-family: var(--fdisplay); font-size: 1.3rem; line-height: 1.65; margin-bottom: 30px; min-height: 72px; }
+.options { display: flex; flex-direction: column; gap: 11px; }
+.opt-btn { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--rs); padding: 17px 18px; color: var(--text); font-family: var(--fbody); font-size: 0.93rem; line-height: 1.5; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 13px; transition: all 0.25s ease; }
+.opt-btn:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.28); transform: translateX(5px); box-shadow: 0 8px 28px rgba(0,0,0,0.28); }
+.opt-btn:active { transform: scale(0.98); }
+.opt-label { width: 30px; height: 30px; border-radius: 50%; background: var(--grad); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; flex-shrink: 0; color: #fff; }
+.loading-wrap { text-align: center; padding: 120px 20px; }
+.load-emoji { font-size: 4rem; display: inline-block; animation: spin 2s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.load-text { font-family: var(--fdisplay); font-size: 1.35rem; margin-top: 22px; }
+.load-sub { color: var(--muted); font-size: 0.88rem; margin-top: 8px; }
+.result-badge { text-align: center; padding: 44px 0 18px; }
+.res-emoji { font-size: 5rem; display: block; margin-bottom: 14px; filter: drop-shadow(0 0 32px rgba(255,60,172,0.55)); animation: bob 3s ease-in-out infinite; }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.res-type { font-family: var(--fdisplay); font-size: 2.6rem; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 6px; line-height: 1.2; }
+.res-subtitle { font-size: 1.05rem; color: var(--muted); }
+.res-card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--r); backdrop-filter: blur(24px); padding: 26px 22px; }
+.res-teaser { font-size: 0.95rem; line-height: 1.75; padding: 18px; background: rgba(255,255,255,0.04); border-radius: var(--rs); border-left: 3px solid var(--pink); margin-bottom: 18px; }
+.locked-wrap { position: relative; border-radius: var(--rs); overflow: hidden; margin-bottom: 8px; }
+.locked-blur { padding: 18px; background: rgba(255,255,255,0.04); border-radius: var(--rs); filter: blur(5px); user-select: none; pointer-events: none; font-size: 0.88rem; line-height: 1.7; color: var(--muted); }
+.locked-over { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(9,9,15,0.55); backdrop-filter: blur(2px); }
+.lock-icon { font-size: 2.2rem; }
+.cpq-notice { text-align: center; font-size: 0.8rem; color: var(--muted); line-height: 1.65; margin: 16px 0 6px; }
+.cpq-notice strong { color: var(--pink); }
+.btn { display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%; padding: 17px 22px; border-radius: var(--rs); font-family: var(--fbody); font-size: 0.97rem; font-weight: 700; cursor: pointer; border: none; transition: all 0.3s ease; color: #fff; margin-top: 10px; letter-spacing: -0.01em; }
+.btn-coupang { background: linear-gradient(135deg, #FF3CAC, #784BA0); box-shadow: 0 8px 28px rgba(255,60,172,0.38); position: relative; overflow: hidden; }
+.btn-coupang::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent); transition: left 0.55s; }
+.btn-coupang:hover::after { left: 100%; }
+.btn-coupang:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(255,60,172,0.5); }
+.btn-share { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); }
+.btn-share:hover { background: rgba(255,255,255,0.13); }
+.btn-home { background: transparent; border: 1px solid rgba(255,255,255,0.13); color: var(--muted); margin-top: 18px; }
+.btn-home:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+.res-full { display: none; }
+.res-full.on { display: block; }
+.traits { display: flex; flex-wrap: wrap; gap: 7px; margin: 16px 0; }
+.trait { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.13); border-radius: 100px; padding: 5px 13px; font-size: 0.78rem; color: var(--muted); }
+.trait.hi { background: rgba(255,60,172,0.14); border-color: rgba(255,60,172,0.3); color: var(--pink); }
+.res-section { margin-top: 16px; padding: 18px; background: rgba(255,255,255,0.04); border-radius: var(--rs); }
+.res-sec-title { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 9px; font-family: var(--fdisplay); }
+.res-sec-body { font-size: 0.93rem; line-height: 1.75; }
+.fade-in { animation: fadeIn 0.5s ease both; }
+.slide-in { animation: slideIn 0.35s ease both; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+@keyframes slideIn { from { opacity:0; transform:translateX(22px); } to { opacity:1; transform:translateX(0); } }
+.footer { text-align: center; color: var(--muted); font-size: 0.72rem; margin-top: 64px; padding-top: 18px; border-top: 1px solid var(--card-border); line-height: 1.8; }
+@media (max-width: 480px) { .q-text { font-size: 1.1rem; } .res-type { font-size: 2rem; } .res-emoji { font-size: 4rem; } }
+</style>
+</head>
+<body>
+<div class="orb o1"></div>
+<div class="orb o2"></div>
+<div class="orb o3"></div>
+<div id="app">
+
+  <!-- HOME -->
+  <div class="screen active" id="screen-home">
+    <header class="site-header fade-in">
+      <div class="site-logo">✨ 마이타입</div>
+      <p class="site-tagline">나를 더 깊이 알아가는 심리테스트 모음 · 무료</p>
+    </header>
+    <div class="sec-label">지금 인기 테스트</div>
+    <div class="tests-grid" id="tests-grid"></div>
+    <footer class="footer">
+      <p>✨ 마이타입 | 나를 알아가는 심리테스트</p>
+      <p>이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+    </footer>
+  </div>
+
+  <!-- QUESTION -->
+  <div class="screen" id="screen-question">
+    <div class="q-header">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <span class="q-test-name" id="q-test-name"></span>
+    </div>
+    <div class="prog-wrap"><div class="prog-fill" id="prog-fill"></div></div>
+    <div class="q-num" id="q-num"></div>
+    <div class="q-text" id="q-text"></div>
+    <div class="options" id="options"></div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="screen" id="screen-loading">
+    <div class="loading-wrap">
+      <span class="load-emoji">🔮</span>
+      <div class="load-text" id="load-text">결과를 분석하는 중...</div>
+      <div class="load-sub">잠시만 기다려 주세요</div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="screen" id="screen-result">
+    <div class="result-badge fade-in">
+      <span class="res-emoji" id="res-emoji"></span>
+      <div class="res-type" id="res-type"></div>
+      <div class="res-subtitle" id="res-subtitle"></div>
+    </div>
+    <div class="res-card fade-in">
+      <div class="res-teaser" id="res-teaser"></div>
+      <div class="locked-wrap" id="locked-wrap">
+        <div class="locked-blur">상세 성격 분석 · 핵심 강점과 약점 · 잘 맞는 유형 · 직업 적성 분석 · 오늘의 맞춤 조언<br><br>당신만을 위한 깊이 있는 분석 결과가 준비되어 있어요. 잠금을 해제하고 전체 결과를 확인해보세요!</div>
+        <div class="locked-over"><span class="lock-icon">🔒</span></div>
+      </div>
+      <p class="cpq-notice" id="cpq-notice">
+        <strong>🛍️ 쿠팡으로 이동하고 결과 확인하기</strong><br>
+        아래 버튼을 누르면 쿠팡 파트너스 페이지로 이동한 후 상세 결과가 잠금 해제됩니다.
+      </p>
+      <button class="btn btn-coupang" id="cpq-btn" onclick="goToCoupang()">🛍️ 쿠팡으로 이동하고 결과 확인하기</button>
+      <div class="res-full" id="res-full"></div>
+      <button class="btn btn-share" id="share-btn" style="display:none" onclick="shareResult()">🔗 결과 공유하기</button>
+    </div>
+    <button class="btn btn-home" onclick="goHome()">🏠 다른 테스트 해보기</button>
+  </div>
+
+</div>
+<script>
+var COUPANG_URL = 'https://link.coupang.com/a/ecVgFa';
+
+var TESTS = [
+  {
+    id:'mbti', name:'MBTI 성격유형 테스트', emoji:'🧠',
+    desc:'나는 어떤 성격 유형일까? 16가지 유형 중 나만의 MBTI를 찾아보세요.',
+    grad:'linear-gradient(135deg, rgba(255,60,172,0.12), rgba(168,85,247,0.12))',
+    questions:[
+      {text:'주말에 에너지를 가장 잘 충전하는 방법은?', opts:['친구들과 신나게 만나고 떠들기','집에서 혼자 조용히 쉬기']},
+      {text:'처음 만나는 자리에서 나는?', opts:['먼저 말을 걸며 새로운 인연을 즐긴다','상대가 먼저 말을 걸어주길 기다린다']},
+      {text:'파티나 모임 자리에서 내 모습은?', opts:['여러 사람과 두루두루 어울리며 에너지가 솟는다','친한 몇 명과만 깊게 대화한다']},
+      {text:'오랫동안 혼자 있으면?', opts:['심심하고 답답해서 누군가와 연락하고 싶어진다','오히려 충전되고 편안하게 느껴진다']},
+      {text:'새 프로젝트를 시작할 때 나는?', opts:['전체적인 가능성과 큰 그림을 먼저 상상한다','구체적인 방법과 실행 단계부터 파악한다']},
+      {text:'나와 더 가까운 유형은?', opts:['상상력이 풍부하고 아이디어가 넘친다','현실적이고 실용적인 판단을 잘 한다']},
+      {text:'미래에 대해 생각할 때 나는?', opts:['다양한 가능성을 상상하며 꿈을 키운다','현실적으로 실현 가능한 계획을 세운다']},
+      {text:'대화할 때 나는?', opts:['비유·은유·개념적인 이야기를 즐긴다','구체적이고 사실에 근거한 이야기를 선호한다']},
+      {text:'친구가 힘든 일을 털어놓을 때 나는?', opts:['해결책이나 현실적인 조언을 먼저 제시한다','감정에 공감하며 충분히 들어준다']},
+      {text:'중요한 결정을 내릴 때 나는?', opts:['논리와 객관적인 사실에 근거해 판단한다','나의 가치관과 감정적 영향을 더 중시한다']},
+      {text:'나에게 더 힘든 말은?', opts:['"왜 이렇게 차갑고 냉정해?"','"그건 논리적으로 말이 안 돼"']},
+      {text:'의견이 다를 때 나는?', opts:['논리적으로 옳고 그름을 따지며 설득한다','상대방의 감정과 입장을 먼저 배려한다']},
+      {text:'여행을 계획할 때 나는?', opts:['숙소·일정·맛집을 꼼꼼히 미리 예약한다','대략적인 목적지만 정하고 즉흥적으로 즐긴다']},
+      {text:'마감이 있는 일을 할 때 나는?', opts:['미리미리 끝내고 여유를 즐기는 편이다','마감 직전 집중력이 폭발해서 끝낸다']},
+      {text:'내 방/책상은?', opts:['늘 깔끔하게 정리정돈 되어 있다','나만 아는 나름의 창의적 카오스 상태다']},
+      {text:'계획이 갑자기 바뀌었을 때?', opts:['불편하고 다시 정리하고 싶어진다','그것도 나름 재미있어! 오히려 신난다']}
+    ],
+    calculate:function(a){
+      var E=0,N=0,T=0,J=0;
+      for(var i=0;i<4;i++) if(a[i]===0) E++;
+      for(var i=4;i<8;i++) if(a[i]===0) N++;
+      for(var i=8;i<12;i++) if(a[i]===0) T++;
+      for(var i=12;i<16;i++) if(a[i]===0) J++;
+      return MBTI[(E>=2?'E':'I')+(N>=2?'N':'S')+(T>=2?'T':'F')+(J>=2?'J':'P')];
+    }
+  },
+  {
+    id:'teto', name:'에겐 vs 테토 테스트', emoji:'⚡',
+    desc:'요즘 MZ세대에서 핫한 새로운 성향 분류! 나는 테토형일까, 에겐형일까?',
+    grad:'linear-gradient(135deg, rgba(34,211,238,0.12), rgba(168,85,247,0.12))',
+    questions:[
+      {text:'친구와 의견이 충돌할 때 나는?', opts:['내 의견을 강하게·직접적으로 주장한다','상대의 입장을 먼저 이해하려 한다']},
+      {text:'새로운 도전 앞에서 나는?', opts:['일단 해보자! 실패해도 괜찮아','충분히 준비하고 신중하게 접근한다']},
+      {text:'그룹 활동에서 나의 역할은?', opts:['자연스럽게 리드하고 방향을 잡는 편','팀 분위기를 살피며 조율하는 편']},
+      {text:'내가 좋아하는 대화 스타일은?', opts:['핵심만 빠르게, 결론부터 말해줘','천천히 맥락을 공유하며 깊이 있게']},
+      {text:'감정 표현 방식은?', opts:['직접적으로 솔직하게 표현한다','은근하고 섬세하게 표현한다']},
+      {text:'스트레스를 받을 때 나는?', opts:['행동으로 해소한다 (운동·청소·외출 등)','감정을 정리하는 조용한 시간을 갖는다']},
+      {text:'계획이 갑자기 바뀌었을 때?', opts:['빠르게 적응하고 새 방향을 잡는다','당황스럽고 마음이 불편하다']},
+      {text:'내가 매력적이라 생각하는 나의 모습은?', opts:['추진력 있고 자신감 넘치는 모습','섬세하고 다정한 배려심 있는 모습']},
+      {text:'관계에서 중요하게 생각하는 것은?', opts:['서로의 독립성과 자율성 존중','깊은 유대감과 감정적 교류']},
+      {text:'나에게 더 끌리는 것은?', opts:['빠른 결정, 명확한 실행력','충분한 고민, 세심한 배려']}
+    ],
+    calculate:function(a){
+      var t=0; for(var i=0;i<a.length;i++) if(a[i]===0) t++;
+      if(t>=8) return TETO.pure_teto;
+      if(t>=6) return TETO.teto_mix;
+      if(t>=4) return TETO.gegen_mix;
+      return TETO.pure_gegen;
+    }
+  },
+  {
+    id:'aura', name:'나만의 컬러 & 아우라 찾기', emoji:'🌈',
+    desc:'내 에너지와 아우라는 어떤 색깔일까? 나만의 퍼스널 컬러를 찾아보세요.',
+    grad:'linear-gradient(135deg, rgba(251,191,36,0.12), rgba(52,211,153,0.12))',
+    questions:[
+      {text:'주변 사람들이 나에 대해 자주 하는 말은?', opts:['항상 에너지가 넘쳐','침착하고 믿음직해','따뜻하고 배려심이 깊어','개성 있고 빛나','신비롭고 독특해']},
+      {text:'내가 가장 좋아하는 시간대는?', opts:['활기찬 낮 시간','조용한 이른 아침','여유로운 오후','화려한 저녁','고요한 밤']},
+      {text:'내가 선호하는 공간은?', opts:['활동적이고 자극적인 도심','정갈하고 질서 있는 공간','자연과 가까운 편안한 곳','세련되고 트렌디한 카페','조용하고 신비로운 분위기']},
+      {text:'나의 패션 스타일은?', opts:['과감하고 눈에 띄는 스타일','깔끔하고 클래식한 스타일','자연스럽고 편안한 스타일','트렌디하고 개성 있는 스타일','독특하고 예술적인 스타일']},
+      {text:'내가 가장 잘하는 것은?', opts:['사람들을 이끌고 동기부여하기','문제를 분석하고 해결하기','사람들을 돌보고 보살피기','창의적인 아이디어 내기','남들이 보지 못하는 것을 보기']},
+      {text:'힘든 상황에서 나는?', opts:['정면으로 맞서 싸운다','차분하게 논리적으로 대처한다','주변 사람들과 함께 헤쳐나간다','새로운 방법을 창의적으로 찾는다','내면의 힘을 찾아 극복한다']},
+      {text:'내가 끌리는 콘텐츠 장르는?', opts:['액션·스포츠·예능','다큐멘터리·역사·미스터리','드라마·힐링물·로맨스','뮤지컬·예술영화·패션','판타지·SF·공포·오컬트']},
+      {text:'친구들 사이에서 나는?', opts:['분위기 메이커, 에너자이저','든든한 조언자, 해결사','모두의 마음을 챙기는 사람','트렌드세터, 스타일리스트','미스터리한 매력의 소유자']}
+    ],
+    calculate:function(a){
+      var c=[0,0,0,0,0]; for(var i=0;i<a.length;i++) c[a[i]]++;
+      var keys=['red','blue','green','gold','purple'];
+      var mx=0; for(var i=1;i<5;i++) if(c[i]>c[mx]) mx=i;
+      return AURA[keys[mx]];
+    }
+  },
+  {
+    id:'love', name:'나의 연애 스타일 테스트', emoji:'💘',
+    desc:'내가 연애할 때 어떤 스타일인지 알아보세요. 집착형? 쿨한 독립형? 로맨티스트?',
+    grad:'linear-gradient(135deg, rgba(251,113,133,0.12), rgba(251,191,36,0.12))',
+    questions:[
+      {text:'좋아하는 사람이 생기면 나는?', opts:['먼저 적극적으로 다가간다','상대가 먼저 다가오길 기다린다','친해지다 자연스럽게 고백한다','설레는 감정만 느끼고 혼자 끝낸다']},
+      {text:'연인에게 연락을 못 받으면?', opts:['많이 불안하고 계속 신경 쓰인다','바쁜가보다 하고 기다린다','나도 연락 안 하고 내 할 일 한다','왜 연락 없지? 화가 나기 시작한다']},
+      {text:'이상적인 데이트는?', opts:['매일 만나도 좋을 만큼 자주 만나기','일주일에 1~2번, 적당히 만나기','한 달에 한 번이라도 특별하게','만남 자체보다 함께하는 시간의 질이 중요']},
+      {text:'연인이 다른 이성과 친하게 지내면?', opts:['많이 신경 쓰이고 질투가 난다','조금 불편하지만 믿으려 노력한다','전혀 신경 안 써, 나도 내 친구 있으니까','직접 물어보고 솔직하게 대화한다']},
+      {text:'싸우고 나서 나는?', opts:['내가 먼저 사과하고 빨리 화해하고 싶다','각자 진정한 후 차분히 대화한다','시간이 필요해, 혼자 있고 싶다','먼저 사과하는 게 지는 것 같아 기다린다']},
+      {text:'연애할 때 나의 우선순위는?', opts:['연인이 1순위, 다 제쳐두고 달려간다','연인도 중요하지만 내 생활도 중요하다','친구·일·취미 다 균형 있게 유지한다','연인이 내 세계의 전부가 된다']},
+      {text:'내가 원하는 애인의 모습은?', opts:['나만 바라봐주는 다정한 사람','서로 독립적으로 존중해주는 사람','같이 성장할 수 있는 동반자','재미있고 내 삶을 풍요롭게 해주는 사람']},
+      {text:'이별 후 나는?', opts:['한동안 힘들고 잊는 데 오래 걸린다','슬프지만 금방 털고 일어난다','이별 원인을 분석하며 성장의 기회로 삼는다','새로운 인연으로 빨리 극복하려 한다']}
+    ],
+    calculate:function(a){
+      var c=[0,0,0,0]; for(var i=0;i<a.length;i++) c[a[i]]++;
+      var keys=['passionate','secure','independent','romantic'];
+      var mx=0; for(var i=1;i<4;i++) if(c[i]>c[mx]) mx=i;
+      return LOVE[keys[mx]];
+    }
+  },
+  {
+    id:'hsp', name:'HSP 고감도 민감자 테스트', emoji:'🌙',
+    desc:'나는 감수성이 예민한 HSP일까? 내 감정 민감도를 알아보세요.',
+    grad:'linear-gradient(135deg, rgba(139,92,246,0.12), rgba(34,211,238,0.12))',
+    questions:[
+      {text:'영화나 드라마를 볼 때 나는?', opts:['자주 눈물을 흘리거나 감정이 격해진다','감동적인 장면에서 가끔 찡하다','별로 감정이입이 안 되는 편이다']},
+      {text:'시끄러운 장소(카페, 파티 등)에 오래 있으면?', opts:['지치고 빨리 나가고 싶어진다','좀 피곤하지만 괜찮은 편이다','전혀 신경 안 쓰인다']},
+      {text:'다른 사람이 불편해하는 걸 눈치채는 편인가요?', opts:['말 안 해도 금방 알아챈다','어느 정도는 캐치하는 편이다','직접 말해줘야 알 수 있다']},
+      {text:'폭력적이거나 잔인한 영상·뉴스를 접하면?', opts:['오래 마음에 남고 기분이 나빠진다','순간 불쾌하지만 금방 잊는다','별로 영향을 받지 않는다']},
+      {text:'혼자만의 시간이 나에게 필요한가요?', opts:['반드시 필요하다, 없으면 지친다','가끔 필요하다','딱히 필요하지 않다']},
+      {text:'맛, 냄새, 소리 등 감각에 민감한 편인가요?', opts:['매우 민감하다, 작은 자극도 신경 쓰인다','보통 정도다','둔감한 편이다']},
+      {text:'중요한 일을 앞두고 나는?', opts:['많이 긴장하고 신경 쓰여서 잠을 못 잔다','약간 긴장하지만 금방 괜찮아진다','별로 긴장하지 않는다']},
+      {text:'아름다운 풍경이나 음악을 접하면?', opts:['깊이 감동받고 오래 여운이 남는다','좋다는 느낌은 드는 편이다','그냥 그렇다']},
+      {text:'누군가 나를 비판하거나 지적하면?', opts:['마음이 많이 상하고 오래 생각한다','기분은 나쁘지만 금방 넘긴다','별로 신경 안 쓰인다']},
+      {text:'여러 일을 동시에 처리해야 할 때?', opts:['압도되고 스트레스를 많이 받는다','조금 부담되지만 해낼 수 있다','멀티태스킹을 잘하는 편이다']}
+    ],
+    calculate:function(a){
+      var s=0; for(var i=0;i<a.length;i++) s+=(2-a[i]);
+      if(s>=16) return HSP.high;
+      if(s>=10) return HSP.mid;
+      return HSP.low;
+    }
+  },
+  {
+    id:'work', name:'나의 직장인 유형 테스트', emoji:'💼',
+    desc:'직장에서 나는 어떤 유형? 워커홀릭? 워라밸 수호자? 사내정치형?',
+    grad:'linear-gradient(135deg, rgba(52,211,153,0.12), rgba(251,191,36,0.12))',
+    questions:[
+      {text:'퇴근 시간이 됐는데 일이 남았다면?', opts:['당연히 남아서 끝낸다','30분만 더 하고 퇴근한다','내일 하면 되지! 칼퇴한다','눈치 보면서 상황 파악 중']},
+      {text:'회식 자리에서 나는?', opts:['분위기 메이커, 제일 신나게 즐긴다','적당히 어울리다 일찍 빠진다','최대한 빠지고 싶다','상사 옆에 앉아서 대화를 주도한다']},
+      {text:'동료가 나한테 일을 부탁하면?', opts:['내 일 아니어도 도와준다','내 여유가 있을 때만 도와준다','내 일도 바쁜데 부탁받는 게 부담된다','도움 주고 나중에 인정받길 기대한다']},
+      {text:'상사의 잘못된 지시에 나는?', opts:['직접 문제점을 말씀드린다','일단 따르되 나중에 조심스럽게 얘기한다','그냥 시키는 대로 한다, 내 책임 아니니까','어떻게 하면 상사 기분 안 나쁘게 말할까 고민한다']},
+      {text:'새 프로젝트가 생기면 나는?', opts:['먼저 손들고 참여하고 싶다','맡게 되면 열심히 한다','조용히 있다가 너무 힘든 거 아니면 한다','이 프로젝트가 나한테 어떤 이득이 있을지 계산한다']},
+      {text:'월요일 아침 출근길 기분은?', opts:['오늘도 열심히 해보자!','그냥 그래, 큰 감흥 없음','벌써 금요일이 기다려진다','이번 주 어떻게 잘 보일지 생각 중']},
+      {text:'야근수당이 없는 야근을 요청받으면?', opts:['일이 중요하니까 한다','정말 급한 거면 하지만 자주는 싫다','No! 계약서에 없는 일은 안 한다','싫지만 거절하면 불이익 받을까봐 한다']},
+      {text:'내가 회사에서 인정받고 싶은 방식은?', opts:['실력과 성과로 인정받기','팀워크와 협력으로 인정받기','인정보다 내 워라밸이 더 중요','상사와의 관계로 자연스럽게 인정받기']}
+    ],
+    calculate:function(a){
+      var c=[0,0,0,0]; for(var i=0;i<a.length;i++) c[a[i]]++;
+      var keys=['workaholic','balance','liberalist','political'];
+      var mx=0; for(var i=1;i<4;i++) if(c[i]>c[mx]) mx=i;
+      return WORK[keys[mx]];
+    }
+  },
+  {
+    id:'healing', name:'나의 힐링 유형 테스트', emoji:'🌿',
+    desc:'스트레스 받을 때 나에게 맞는 진짜 힐링 방법은 뭘까?',
+    grad:'linear-gradient(135deg, rgba(52,211,153,0.12), rgba(139,92,246,0.12))',
+    questions:[
+      {text:'극도로 지쳤을 때 제일 먼저 하고 싶은 건?', opts:['침대에 누워 아무것도 안 하기','친한 친구에게 전화해서 수다 떨기','운동이나 산책으로 몸을 움직이기','맛있는 음식 먹으러 가기','여행이나 드라이브로 일상 탈출']},
+      {text:'나에게 가장 큰 스트레스 원인은?', opts:['사람관계와 갈등','과중한 업무와 책임','미래에 대한 불안','반복되는 일상의 지루함','내 뜻대로 안 되는 상황들']},
+      {text:'완벽한 주말 오전이라면?', opts:['커튼 치고 늦잠 실컷 자기','브런치 카페에서 친구와 수다','러닝이나 요가로 상쾌하게 시작','좋아하는 음식 천천히 만들어 먹기','자연 속에서 산책하거나 캠핑']},
+      {text:'나를 가장 행복하게 만드는 것은?', opts:['아무 방해 없이 혼자만의 조용한 시간','사랑하는 사람들과 함께하는 시간','성취감과 목표 달성의 뿌듯함','감각적인 즐거움 (맛, 향, 음악, 뷰티)','새로운 경험과 자극']},
+      {text:'좋아하는 콘텐츠 유형은?', opts:['ASMR, 빗소리, 백색소음','예능, 토크쇼, 웃긴 영상','운동 브이로그, 건강 콘텐츠','먹방, 쿠킹 채널','여행 브이로그, 풍경 영상']},
+      {text:'기분 전환이 필요할 때 즉흥적으로 하는 행동은?', opts:['침대에 드러눕기','친구에게 연락하기','스트레칭이나 짧은 운동하기','편의점이나 카페 가기','인스타 저장 맛집·카페 찾아가기']}
+    ],
+    calculate:function(a){
+      var c=[0,0,0,0,0]; for(var i=0;i<a.length;i++) c[a[i]]++;
+      var keys=['rest','social','active','sensory','escape'];
+      var mx=0; for(var i=1;i<5;i++) if(c[i]>c[mx]) mx=i;
+      return HEALING[keys[mx]];
+    }
+  }
+];
+
+var MBTI = {
+  ISTJ:{emoji:'🏛️',type:'ISTJ',subtitle:'청렴결백한 논리주의자',teaser:'원칙과 책임을 중시하는 믿음직한 존재! 한번 맡은 일은 반드시 끝까지 해내는 강한 의지를 가졌어요.',traits:['책임감','꼼꼼함','신뢰','인내심','현실적'],full:'사실에 근거해 생각하고 행동하며 의무와 책임을 중요하게 여깁니다. 전통과 질서를 존중하며 어떤 상황에서도 흔들리지 않는 안정감이 최대 강점이에요. 감정보다 논리를 앞세우는 경향이 있지만, 이것이 오히려 주변 사람들에게 깊은 신뢰를 주는 이유입니다.',match:'ESTP, ESFP',career:'회계사, 변호사, 군인, 공무원, 의사'},
+  ISFJ:{emoji:'🌸',type:'ISFJ',subtitle:'따뜻한 수호자',teaser:'남들을 돕는 것에서 큰 기쁨을 느끼는 따뜻한 수호자! 주변 사람들에게 없어서는 안 될 소중한 존재예요.',traits:['배려심','헌신','성실함','따뜻함','공감'],full:'다른 사람의 감정에 민감하고 그들을 돕는 데서 삶의 보람을 찾습니다. 겸손하고 조용하지만 한번 마음을 정하면 끝까지 헌신하는 타입이에요. 타인의 필요를 미리 파악하고 세심하게 챙기는 능력이 탁월합니다.',match:'ESTP, ESFP',career:'간호사, 사회복지사, 교사, 상담사, 영양사'},
+  INFJ:{emoji:'🔮',type:'INFJ',subtitle:'선의의 옹호자',teaser:'깊은 통찰력과 강한 신념을 가진 희귀한 유형! 세상을 더 나은 곳으로 만들고 싶은 이상주의자예요.',traits:['통찰력','공감','이상주의','창의성','헌신'],full:'전 세계 인구의 약 1~2%에 불과한 가장 희귀한 유형 중 하나입니다. 강한 직관과 공감 능력을 바탕으로 사람들을 깊이 이해하고, 세상을 더 나은 곳으로 만들려는 사명감을 가집니다. 내면 세계가 풍부하고 진정성 있는 관계를 소중히 여깁니다.',match:'ENFP, ENTP',career:'작가, 심리상담사, 예술가, 사회활동가, 교수'},
+  INTJ:{emoji:'♟️',type:'INTJ',subtitle:'용의주도한 전략가',teaser:'냉철한 분석력과 뛰어난 전략적 사고를 가진 천재형! 복잡한 문제도 빠르게 꿰뚫어 봅니다.',traits:['전략적 사고','독립적','분석력','완벽주의','결단력'],full:'뛰어난 지적 능력과 전략적 사고로 복잡한 문제도 체계적으로 해결합니다. 독립적이고 자기 확신이 강하며 효율성을 극도로 중시합니다. 장기적 비전을 가지고 행동하는 마스터마인드형이에요.',match:'ENFP, ENTP',career:'전략 컨설턴트, 과학자, 엔지니어, CEO, 건축가'},
+  ISTP:{emoji:'🔧',type:'ISTP',subtitle:'만능 재주꾼',teaser:'조용하지만 무엇이든 뚝딱 해내는 실용주의자! 위기 상황에서 빛을 발하는 쿨한 매력을 가졌어요.',traits:['실용적','분석적','독립적','침착함','유연성'],full:'관찰하고 분석하는 것을 즐기며, 손으로 무언가를 만들거나 고치는 것에 능숙합니다. 위기 상황에서 특히 빛나는 침착함과 문제해결 능력을 발휘해요. 감정 표현은 서툴지만 묵묵히 행동으로 보여주는 타입입니다.',match:'ESTJ, ENTJ',career:'엔지니어, 파일럿, 외과의사, 경찰, 스포츠 선수'},
+  ISFP:{emoji:'🎨',type:'ISFP',subtitle:'호기심 많은 예술가',teaser:'조용하지만 내면에 풍부한 감성을 가진 자유로운 예술가 기질! 아름다움을 보는 눈이 특별해요.',traits:['예술적 감각','감성','자유분방','친절함','적응력'],full:'삶의 아름다움을 느끼고 표현하는 데 특별한 재능을 가집니다. 내향적이지만 매우 따뜻하고 친절하며 현재 순간을 즐기는 능력이 탁월해요. 자신만의 가치관과 감성이 뚜렷하고 강요나 규칙에 얽매이는 것을 싫어하는 자유로운 영혼입니다.',match:'ESTJ, ESFJ',career:'디자이너, 패션 스타일리스트, 음악가, 사진작가, 수의사'},
+  INFP:{emoji:'🦋',type:'INFP',subtitle:'열정적인 중재자',teaser:'깊은 감수성과 강한 이상을 가진 몽상가! 세상을 좀 더 따뜻하게 만들고 싶은 마음을 가졌어요.',traits:['감수성','이상주의','창의성','공감','개방성'],full:'깊은 감수성과 풍부한 내면 세계를 가지고 있으며 진정성과 의미 있는 삶을 추구합니다. 사람들의 잠재력을 믿고 긍정적인 변화를 이끌어내고자 합니다. 갈등을 싫어하고 조화를 추구하며 창의적인 방식으로 자신을 표현하는 것을 즐깁니다.',match:'ENFJ, ENTJ',career:'작가, 심리상담사, 사회복지사, 번역가, 음악가'},
+  INTP:{emoji:'💡',type:'INTP',subtitle:'논리적인 사색가',teaser:'끊임없이 세상의 원리를 탐구하는 지적 탐험가! 복잡한 아이디어를 다루는 데 천재적인 능력을 발휘해요.',traits:['논리성','창의적 사고','객관성','독립성','지적 호기심'],full:'세상의 모든 것에 의문을 품고 논리적으로 탐구하는 것을 즐깁니다. 지식에 대한 갈망이 끝이 없으며 복잡한 이론적 개념을 다루는 데 뛰어납니다. 혼자만의 시간을 소중히 여기고 관행에 얽매이지 않는 독창적인 아이디어를 가집니다.',match:'ENTJ, ESTJ',career:'과학자, 철학자, 프로그래머, 수학자, 건축가'},
+  ESTP:{emoji:'🔥',type:'ESTP',subtitle:'모험을 즐기는 사업가',teaser:'현재를 즐기는 천생 액션파! 어떤 상황에서도 재빠르게 적응하고 주도권을 잡는 에너지가 넘쳐요.',traits:['행동력','대담함','적응력','관찰력','설득력'],full:'이론보다 직접 경험하고 행동하는 것을 선호합니다. 사람들과 어울리는 것을 좋아하고 현재 순간에 충실하며 빠른 상황 판단력과 위기 대응 능력이 탁월해요. 규칙보다 실용성을 중시하고 협상과 설득에 뛰어난 타고난 사업가 기질입니다.',match:'ISFJ, ISTJ',career:'기업가, 영업직, 소방관, 응급의사, 스포츠 선수'},
+  ESFP:{emoji:'🎭',type:'ESFP',subtitle:'자유로운 영혼의 연예인',teaser:'어디서든 분위기를 밝히는 타고난 엔터테이너! 사람들과 함께할 때 무한한 에너지가 솟아나요.',traits:['활발함','낙천성','즉흥성','친화력','감성'],full:'삶을 즐기고 주변 사람들도 즐겁게 만드는 타고난 엔터테이너입니다. 현재에 집중하고 새로운 경험과 사람들에게 열려 있으며 뛰어난 대인관계 능력으로 어디서든 사랑받습니다. 삶에 대한 순수한 열정이 넘쳐요.',match:'ISFJ, ISTJ',career:'배우, 가수, 이벤트 플래너, 관광 가이드, 요리사'},
+  ENFP:{emoji:'🌟',type:'ENFP',subtitle:'재기발랄한 활동가',teaser:'무한한 상상력과 열정으로 세상을 새롭게 보는 낙천주의자! 사람들에게 영감을 주는 천생 크리에이터예요.',traits:['창의성','열정','낙관주의','사교성','공감'],full:'열정적이고 창의적이며 새로운 가능성을 발견하는 데 탁월한 능력을 가집니다. 사람들에게 영감을 주고 따뜻하게 격려하는 것을 즐기며 다양한 관심사를 가진 만능 재주꾼이에요. 자유롭게 아이디어를 탐색하는 것을 좋아합니다.',match:'INFJ, INTJ',career:'크리에이터, 마케터, 배우, 작가, 상담사'},
+  ENTP:{emoji:'⚡',type:'ENTP',subtitle:'뜨거운 논쟁을 즐기는 변론가',teaser:'날카로운 위트와 지적 호기심으로 늘 새로운 아이디어를 탐구하는 혁신가! 토론에서 절대 질 수 없어요.',traits:['창의성','논리력','유머','적응력','혁신'],full:'지적 도전과 논쟁을 즐기며 항상 새로운 관점으로 세상을 바라봅니다. 빠른 사고와 창의적인 문제 해결 능력이 탁월하고 아이디어를 연결하고 가능성을 발견하는 능력이 뛰어나요. 도발적인 질문으로 대화를 이끌지만 악의 없는 진정한 지적 탐험가입니다.',match:'INFJ, INTJ',career:'기업가, 변호사, 컨설턴트, 발명가, 프로듀서'},
+  ESTJ:{emoji:'👑',type:'ESTJ',subtitle:'엄격한 관리자',teaser:'질서와 규칙으로 목표를 달성하는 타고난 리더! 어떤 조직에서든 든든한 핵심 역할을 맡아요.',traits:['리더십','책임감','결단력','조직력','성실함'],full:'명확한 기준과 질서를 중시하며 목표를 향해 체계적으로 나아갑니다. 결단력이 강하고 팀을 효율적으로 이끄는 능력이 탁월해요. 전통과 규칙을 존중하며 자신과 타인 모두에게 높은 기준을 적용합니다.',match:'ISFP, ISTP',career:'관리자, CEO, 판사, 군 장교, 학교 교장'},
+  ESFJ:{emoji:'💝',type:'ESFJ',subtitle:'사교적인 외교관',teaser:'따뜻한 마음으로 주변을 하나로 묶는 커뮤니티의 중심! 남을 돕는 것이 진짜 행복인 사람이에요.',traits:['배려심','사교성','따뜻함','헌신','협력'],full:'사람들을 행복하게 만드는 것에서 큰 보람을 느끼며 커뮤니티와 조화를 매우 중시합니다. 타인의 필요를 빠르게 파악하고 도우려는 성향이 강하며 강한 사회적 책임감을 가집니다.',match:'ISFP, ISTP',career:'교사, 간호사, 사회복지사, HR 담당자, 이벤트 플래너'},
+  ENFJ:{emoji:'🌍',type:'ENFJ',subtitle:'정의로운 사회운동가',teaser:'카리스마와 공감 능력으로 사람들에게 영감을 주는 천생 리더! 세상을 더 나은 곳으로 만들려 노력해요.',traits:['카리스마','공감','리더십','이타심','영감'],full:'타인의 잠재력을 발견하고 이끌어내는 데 특별한 재능이 있습니다. 강한 공감 능력과 카리스마를 겸비한 자연스러운 리더로 사람들을 하나의 공통 목표를 향해 이끌 수 있어요. 진정으로 세상과 사람을 사랑하며 더 나은 미래를 위해 헌신합니다.',match:'INFP, ISFP',career:'정치인, 교육자, 코치, NGO 활동가, 심리상담사'},
+  ENTJ:{emoji:'⚔️',type:'ENTJ',subtitle:'대담한 통솔자',teaser:'타고난 리더십과 전략적 사고로 목표를 향해 돌진하는 승부사! 불가능이란 없는 도전의 아이콘이에요.',traits:['리더십','전략','결단력','카리스마','목표지향'],full:'장기적인 비전을 수립하고 이를 실현하기 위해 체계적으로 행동합니다. 어떤 상황에서도 리더 역할을 자연스럽게 맡고 효율성과 성과를 극도로 중시해요. 도전적인 목표를 설정하고 반드시 달성하는 강한 추진력이 있습니다.',match:'INFP, INTP',career:'CEO, 기업가, 변호사, 군 장교, 투자은행가'}
+};
+
+var TETO = {
+  pure_teto:{emoji:'🔥',type:'순수 테토형',subtitle:'추진력의 화신',teaser:'강한 의지와 추진력으로 목표를 향해 직진하는 타입! 자신감 넘치고 결단력 있는 매력을 가졌어요.',traits:['추진력','직설적','자신감','리더십','독립적'],full:'테스토스테론형 에너지가 강한 순수 테토형입니다. 목표가 생기면 거침없이 달려나가고 말보다 행동이 앞서는 타입이에요. 감정보다 효율을 중시하며 직접적인 소통을 선호합니다. 리더십이 강하고 어떤 상황에서도 주도권을 자연스럽게 쥐게 되는 카리스마를 가졌어요.',match:'에겐형과 잘 맞아요 — 서로 다른 에너지가 균형을 이룹니다',career:'기업가, 스포츠 선수, 군인, 영업직, 리더 포지션'},
+  teto_mix:{emoji:'⚡',type:'테토 우세 혼합형',subtitle:'균형 잡힌 추진력',teaser:'추진력과 섬세함을 모두 갖춘 실전형! 강하지만 상황에 따라 유연하게 대응하는 능력이 탁월해요.',traits:['추진력','유연성','판단력','적응력','리더십'],full:'테토형의 추진력을 기반으로 하되 에겐형의 섬세함도 함께 가지고 있는 균형 잡힌 타입입니다. 대부분의 상황에서는 주도적으로 행동하지만 필요할 때는 감수성을 발휘해 공감도 잘 합니다. 가장 현실적이고 실용적인 유형이에요.',match:'다양한 유형과 잘 어울리는 폭넓은 스펙트럼을 가졌어요',career:'관리자, 프로젝트 매니저, 상담사, 컨설턴트'},
+  gegen_mix:{emoji:'🌙',type:'에겐 우세 혼합형',subtitle:'섬세한 공감형',teaser:'감성과 현실 감각을 동시에 갖춘 따뜻한 리더! 공감하면서도 필요할 때는 단호하게 행동해요.',traits:['공감력','섬세함','균형감','따뜻함','결단력'],full:'에겐형의 풍부한 감수성을 바탕으로 하면서 상황에 따라 테토형의 추진력도 발휘합니다. 사람들의 감정을 세심하게 이해하고 배려하지만 중요한 순간에는 명확한 결정을 내리는 균형 잡힌 매력을 가졌어요.',match:'테토형과의 만남이 서로를 성장시켜요',career:'상담사, 교사, HR, 사회복지사, 중간 관리자'},
+  pure_gegen:{emoji:'✨',type:'순수 에겐형',subtitle:'섬세함의 달인',teaser:'풍부한 감수성과 깊은 공감 능력을 가진 따뜻한 에겐형! 사람들의 마음을 읽는 능력이 탁월해요.',traits:['공감력','섬세함','배려심','감수성','직관'],full:'에스트로겐형 에너지가 강한 순수 에겐형입니다. 사람들의 감정 변화를 세심하게 캐치하고 상대방이 필요로 하는 것을 미리 파악하는 능력이 탁월해요. 직접적인 표현보다 은근하고 섬세한 방식으로 소통하며 깊고 진정성 있는 관계를 추구합니다.',match:'테토형과 잘 맞아요 — 서로의 부족한 면을 채워줍니다',career:'예술가, 심리상담사, 교사, 의료계, 작가'}
+};
+
+var AURA = {
+  red:{emoji:'🔴',type:'레드 오라',subtitle:'정열과 에너지의 화신',teaser:'강렬한 생명력과 정열적인 에너지를 발산하는 레드 오라의 소유자! 어딜 가도 존재감이 넘쳐요.',traits:['정열적','에너지 넘침','리더십','행동파','강인함'],full:'레드 오라는 삶에 대한 강한 열정과 무한한 에너지를 상징합니다. 당신은 방 안에 들어서는 순간 공기가 달라지는 타입이에요. 목표를 향해 거침없이 나아가는 추진력과 사람들을 이끄는 자연스러운 리더십이 당신만의 강력한 무기입니다.',match:'그린 오라, 블루 오라와 균형을 이룹니다',tip:'충분한 휴식으로 에너지를 안정적으로 유지하세요'},
+  blue:{emoji:'🔵',type:'블루 오라',subtitle:'지성과 신뢰의 상징',teaser:'차분하고 신뢰할 수 있는 지적인 에너지를 발산하는 블루 오라! 어떤 상황에서도 침착함을 잃지 않아요.',traits:['지성','신뢰감','침착함','분석력','소통'],full:'블루 오라는 지성, 신뢰, 그리고 명확한 소통을 상징합니다. 당신의 존재는 주변에 안정감을 주고 사람들이 자연스럽게 조언을 구하러 찾아오게 만들어요. 감정보다 이성을 앞세우지만 깊은 내면에는 따뜻한 감수성도 가지고 있습니다.',match:'골드 오라, 퍼플 오라와 잘 어울립니다',tip:'가끔은 감정을 자유롭게 표현하는 연습도 해보세요'},
+  green:{emoji:'💚',type:'그린 오라',subtitle:'치유와 균형의 에너지',teaser:'자연의 따뜻함처럼 모든 것을 치유하고 조화롭게 만드는 그린 오라! 당신 곁에 있으면 마음이 편안해져요.',traits:['치유력','균형','따뜻함','자연친화','포용력'],full:'그린 오라는 성장, 치유, 그리고 자연의 풍요로움을 상징합니다. 당신은 갈등을 중재하고 상처를 치유하는 천연 힐러예요. 주변 사람들이 당신 곁에 있으면 자연스럽게 마음이 편안해지는 특별한 에너지를 가졌습니다.',match:'레드 오라, 골드 오라와 좋은 균형을 이룹니다',tip:'자신을 돌보는 것도 잊지 마세요 — 타인을 위해 에너지를 모두 쏟지 않도록!'},
+  gold:{emoji:'🌟',type:'골드 오라',subtitle:'창의성과 카리스마의 빛',teaser:'황금빛 카리스마와 넘치는 창의성으로 주변을 밝히는 골드 오라! 당신이 있는 곳에는 항상 빛이 나요.',traits:['카리스마','창의성','낙관주의','자신감','영감'],full:'골드 오라는 성공, 카리스마, 그리고 무한한 창의성을 상징합니다. 당신은 타고난 엔터테이너이자 영감을 주는 존재예요. 어디서든 자연스럽게 주목받고 사람들에게 긍정적인 영향을 줍니다. 창의적인 아이디어가 샘솟고 당신의 낙천주의는 주변 삶을 더 밝게 만들어요.',match:'퍼플 오라, 그린 오라와 아름다운 조화를 이룹니다',tip:'자신감을 유지하면서도 타인의 의견에 귀 기울이는 균형을 찾아보세요'},
+  purple:{emoji:'💜',type:'퍼플 오라',subtitle:'신비와 직관의 힘',teaser:'깊은 직관력과 신비로운 에너지로 남들이 보지 못하는 것을 보는 퍼플 오라! 특별한 감수성의 소유자예요.',traits:['직관력','신비로움','창의성','영성','깊이'],full:'퍼플 오라는 직관, 영성, 그리고 깊은 창의성을 상징합니다. 당신은 표면 너머의 것들을 느끼는 남다른 감각을 가지고 있어요. 사람들이 쉽게 파악하지 못하는 신비로운 매력이 있으며 깊이 있는 대화와 철학적 탐구를 즐깁니다.',match:'블루 오라, 골드 오라와 흥미로운 균형을 이룹니다',tip:'당신의 직관을 믿으세요 — 그것이 당신의 가장 강력한 안내자입니다'}
+};
+
+var LOVE = {
+  passionate:{emoji:'🔥',type:'열정 몰입형',subtitle:'사랑할 땐 올인!',teaser:'연애하면 온 마음을 다 쏟아붓는 열정형! 상대방에게 깊이 빠져드는 진한 사랑을 해요.',traits:['열정적','다정함','표현력','헌신','감수성'],full:'사랑하는 사람에게 모든 것을 쏟아붓는 타입이에요. 감정 표현이 풍부하고 연인을 최우선으로 여깁니다. 상대방의 작은 변화도 금방 알아채는 섬세함이 있어요. 다만 너무 몰입하다 보면 자신을 잃거나 집착으로 이어질 수 있으니, 나 자신도 소중히 챙기는 균형이 필요해요.',match:'안정 신뢰형, 로맨티스트형',career:'연애에서 배운 헌신과 공감능력을 직업에도 발휘하세요'},
+  secure:{emoji:'🤝',type:'안정 신뢰형',subtitle:'든든하고 건강한 연애',teaser:'감정 기복 없이 안정적으로 상대를 믿고 함께 성장하는 건강한 연애의 달인이에요!',traits:['안정감','신뢰','소통','균형','성숙함'],full:'감정적으로 안정되어 있고 파트너를 깊이 신뢰하는 건강한 애착 유형이에요. 갈등이 생겨도 감정적으로 격해지지 않고 대화로 해결하려 합니다. 연인에게 충분한 자유와 공간을 주면서도 든든한 울타리가 되어주는 최고의 파트너예요.',match:'대부분의 유형과 잘 맞아요',career:'안정적인 관계를 구축하는 능력이 직장에서도 빛나요'},
+  independent:{emoji:'🦅',type:'쿨한 독립형',subtitle:'나도 중요해, 너도 중요해',teaser:'연애 중에도 나만의 삶을 지키는 자유로운 영혼! 서로 독립적이면서 함께하는 관계를 추구해요.',traits:['독립적','자유로움','쿨함','자기존중','균형'],full:'연애를 하면서도 자신의 삶, 친구, 취미를 지키는 독립적인 타입이에요. 상대방에게 집착하거나 의존하는 것을 싫어하고 서로의 공간을 존중하는 관계를 원합니다. 쿨해 보이지만 깊은 내면에는 진심이 있어요. 감정 표현을 조금 더 적극적으로 해보면 관계가 더 깊어질 거예요.',match:'쿨한 독립형, 안정 신뢰형',career:'독립적인 성향이 프리랜서나 전문직에서 빛나요'},
+  romantic:{emoji:'🌹',type:'순수 로맨티스트',subtitle:'사랑 자체가 설레는 사람',teaser:'연애의 두근거림과 낭만을 사랑하는 순수한 로맨티스트! 드라마 같은 사랑을 꿈꿔요.',traits:['낭만적','감성적','이상주의','순수함','설렘'],full:'사랑에 대한 순수한 동경과 낭만을 간직한 타입이에요. 특별한 날을 챙기고 감동적인 이벤트를 즐기며 연인을 위한 작은 서프라이즈를 좋아합니다. 이상적인 사랑을 꿈꾸는 만큼 현실과의 괴리에 실망할 수 있어요. 완벽한 사랑보다 함께 성장하는 사랑이 더 아름답다는 것을 기억하세요.',match:'열정 몰입형, 안정 신뢰형',career:'풍부한 감성과 창의성을 예술·마케팅 분야에서 발휘하세요'}
+};
+
+var HSP = {
+  high:{emoji:'🌙',type:'고감도 HSP형',subtitle:'세상을 깊이 느끼는 사람',teaser:'당신은 세상을 남들보다 훨씬 깊고 풍부하게 느끼는 고감도 민감자예요. 이건 특별한 재능이에요!',traits:['깊은 감수성','공감력','직관력','섬세함','창의성'],full:'전 인구의 약 15~20%에 해당하는 HSP(Highly Sensitive Person)예요. 자극에 민감하게 반응하고 감정을 깊이 처리하는 신경계를 가지고 있어요. 이것은 결함이 아니라 타고난 특성이에요. 타인의 감정을 잘 읽고 아름다움에 깊이 감동받으며 직관력이 탁월한 것이 HSP의 강점이에요. 자신만의 회복 루틴을 만들고 과자극 환경을 줄이는 것이 중요해요.',match:'같은 HSP형 또는 안정적이고 배려심 있는 파트너',career:'상담사, 예술가, 작가, 교사, 의료계 — 공감 능력이 빛나는 직업'},
+  mid:{emoji:'🌤️',type:'중간 감도형',subtitle:'감성과 이성의 균형자',teaser:'감수성과 이성이 균형 잡힌 타입! 상황에 따라 유연하게 감정을 조절하는 능력을 가졌어요.',traits:['균형감','적응력','공감','현실감각','유연성'],full:'HSP의 특성을 일부 가지고 있지만 완전한 HSP는 아닌 중간 감도 타입이에요. 감수성이 풍부하면서도 현실적인 판단력을 함께 갖추고 있어요. 민감한 순간과 둔감한 순간이 공존하며 상황에 따라 유연하게 대처할 수 있는 것이 큰 강점이에요.',match:'대부분의 유형과 잘 어울려요',career:'팀워크가 필요한 모든 직업에서 강점을 발휘해요'},
+  low:{emoji:'☀️',type:'저감도 강인형',subtitle:'웬만한 건 거뜬한 멘탈 갑',teaser:'자극에 쉽게 흔들리지 않는 강인한 멘탈의 소유자! 어떤 환경에서도 적응력이 뛰어나요.',traits:['강인함','적응력','행동력','낙관적','현실적'],full:'자극에 크게 반응하지 않고 감정 처리가 빠른 저감도 타입이에요. 시끄러운 환경, 갑작스러운 변화, 강한 자극에도 비교적 쉽게 적응합니다. 빠른 의사결정과 강한 실행력이 장점이에요. 다만 타인의 섬세한 감정을 놓칠 수 있으니 주변 사람들의 감정에 조금 더 주의를 기울여 보세요.',match:'HSP형과 보완적인 관계를 이뤄요',career:'영업, 리더십, 스포츠, 군인, 응급직 등 강한 멘탈이 필요한 곳'}
+};
+
+var WORK = {
+  workaholic:{emoji:'💪',type:'열정 워커홀릭형',subtitle:'일이 곧 나다!',teaser:'일에 대한 열정과 책임감이 남다른 열혈 직장인! 성과로 말하는 진짜 프로예요.',traits:['성실함','책임감','열정','완벽주의','목표지향'],full:'일에서 보람과 의미를 찾고 높은 성과를 내는 데서 성취감을 느끼는 타입이에요. 맡은 일은 반드시 끝까지 해내는 강한 책임감을 가지고 있어요. 다만 번아웃에 주의가 필요해요. 일과 삶의 균형을 의식적으로 챙기지 않으면 건강과 관계에 무리가 올 수 있어요. 쉬는 것도 일의 일부라는 걸 잊지 마세요!',match:'같은 열정형 동료, 또는 균형형 상사',career:'스타트업 창업, 전문직, 컨설팅, 연구직'},
+  balance:{emoji:'⚖️',type:'워라밸 수호자형',subtitle:'일도 삶도 다 잡는다',teaser:'일도 열심히, 내 삶도 절대 포기 안 하는 균형의 달인! 가장 지속가능한 직장 생활을 해요.',traits:['균형감','효율성','자기관리','명확한 경계','현실적'],full:'업무 시간에는 집중해서 효율적으로 일하고 퇴근 후에는 확실하게 쉬는 건강한 직장인이에요. 무리한 요구에 적절히 경계를 긋고 자신의 에너지를 현명하게 배분할 줄 알아요. 장기적으로 가장 안정적이고 지속 가능한 커리어를 만들어 가는 스타일이에요.',match:'어떤 유형의 동료와도 잘 지내요',career:'공기업, 대기업, 워라밸이 좋은 중견기업'},
+  liberalist:{emoji:'🦋',type:'자유 영혼 직장인형',subtitle:'내 시간이 제일 소중해',teaser:'직장은 생계 수단, 진짜 삶은 퇴근 후! 자유와 개인 시간을 가장 소중히 여기는 타입이에요.',traits:['자유로움','개인주의','자기중심','독립적','솔직함'],full:'일보다 자신의 삶을 우선하는 명확한 가치관을 가진 타입이에요. 최소한의 에너지로 최대한의 효율을 내려 하고 불필요한 야근이나 회식에 거부감이 강해요. 프리랜서나 재택근무 환경에서 오히려 뛰어난 성과를 내는 경우가 많아요.',match:'같은 자유형 동료, 자율적인 조직문화',career:'프리랜서, 크리에이터, 재택근무 가능 직종'},
+  political:{emoji:'🎭',type:'사내 처세술형',subtitle:'관계가 경쟁력이다',teaser:'인간관계와 눈치로 조직을 이해하는 처세의 달인! 어느 조직에서든 살아남는 생존력이 있어요.',traits:['눈치','사교성','전략적','적응력','관찰력'],full:'조직의 권력 구조와 인간관계를 빠르게 파악하고 그에 맞게 행동하는 타입이에요. 상사와의 관계 관리에 능숙하고 조직 문화에 빠르게 적응해요. 이 능력은 분명한 강점이지만 때로는 자신의 진짜 실력을 개발하는 데도 투자해야 장기적으로 성장할 수 있어요.',match:'능력을 인정해주는 상사, 협력적인 팀',career:'대기업 관리직, 영업, 정치, PR, 인사관리'}
+};
+
+var HEALING = {
+  rest:{emoji:'🛌',type:'완전 휴식형',subtitle:'아무것도 안 하는 게 최고의 힐링',teaser:'진정한 힐링은 아무것도 안 하는 것! 충분한 휴식이 최고의 에너지 충전법인 사람이에요.',traits:['내향적','회복력','자기인식','평온함','독립적'],full:'몸과 마음의 충전을 위해 조용한 휴식이 꼭 필요한 타입이에요. 혼자만의 시간에서 가장 깊은 회복을 경험합니다. 아무것도 하지 않는 시간이 사치가 아니라 건강한 삶을 위한 필수 요소라는 것을 기억하세요.',match:'같은 휴식형, 또는 혼자만의 공간을 존중해주는 사람',tip:'주 1회 완전한 디지털 디톡스를 시도해보세요'},
+  social:{emoji:'🥂',type:'사람 충전형',subtitle:'사람이 나의 에너지원!',teaser:'사랑하는 사람들과 함께할 때 에너지가 솟는 소셜 힐러! 사람이 최고의 힐링이에요.',traits:['사교적','활발함','공감력','긍정적','따뜻함'],full:'사랑하는 사람들과 함께하는 시간에서 에너지를 얻는 외향형 힐링 타입이에요. 웃음과 대화가 최고의 스트레스 해소법이고 혼자 있을 때보다 함께할 때 더 생기가 넘쳐요. 인간관계에서 힘을 얻는 만큼, 연락하고 만남을 이어가는 것이 정신 건강에 매우 중요해요.',match:'같은 사교형, 또는 함께 어울리기 좋아하는 사람',tip:'정기적인 친구 모임이나 소셜 활동을 일정에 꼭 넣어두세요'},
+  active:{emoji:'🏃',type:'액티브 활동형',subtitle:'몸을 움직여야 풀린다!',teaser:'운동하고 땀 흘려야 진짜 힐링이 되는 액티브한 타입! 몸이 건강해야 마음도 건강해요.',traits:['활동적','건강관리','의지력','체력','긍정적'],full:'신체 활동을 통해 스트레스를 해소하고 에너지를 충전하는 타입이에요. 운동 후 분비되는 엔도르핀이 최고의 힐링제예요. 걷기, 러닝, 요가, 클라이밍 등 자신에게 맞는 활동을 꾸준히 유지하는 것이 장기적인 행복의 열쇠예요.',match:'같은 활동형, 또는 건강에 관심 있는 사람',tip:'하루 20분이라도 몸을 움직이는 것이 항우울제보다 효과적이에요'},
+  sensory:{emoji:'🍽️',type:'감각 충전형',subtitle:'오감으로 즐기는 힐링',teaser:'맛있는 것 먹고, 좋은 향기 맡고, 예쁜 것 보면서 힐링하는 감각적인 타입이에요!',traits:['감각적','미식가','심미안','즉흥적','현재지향'],full:'맛, 향, 시각, 촉각 등 오감의 즐거움에서 깊은 만족과 힐링을 경험하는 타입이에요. 맛집 탐방, 카페 탐방, 향기로운 입욕제, 예쁜 뷰티 제품, 아름다운 인테리어 등이 진정한 힐링이에요. 현재 순간의 감각적 즐거움에 충실한 건강한 쾌락주의자예요.',match:'같은 미식가형, 또는 새로운 경험을 즐기는 사람',tip:'한 달에 한 번은 꼭 가보고 싶었던 맛집에 자신을 위한 데이트를 해보세요'},
+  escape:{emoji:'✈️',type:'일탈 탈출형',subtitle:'새로운 곳에서 리셋!',teaser:'일상을 벗어나 새로운 자극을 받아야 충전되는 자유로운 영혼! 여행이 최고의 힐링이에요.',traits:['모험심','자유로움','호기심','즉흥성','개방성'],full:'익숙한 환경에서 벗어나 새로운 장소, 경험, 자극을 통해 리셋하는 타입이에요. 멀리 떠나는 여행이 아니더라도 새로운 동네 카페, 처음 가는 전시회, 즉흥 드라이브만으로도 큰 힐링이 돼요. 일상에 작은 새로움을 자주 넣어주는 것이 스트레스 관리의 핵심이에요.',match:'같은 모험형, 또는 함께 여행가기 좋은 사람',tip:'버킷리스트를 만들고 한 달에 하나씩 도전해보세요'}
+};
+
+var S = {testIdx:null, qIdx:0, answers:[], result:null};
+
+function showScreen(id) {
+  var screens = document.querySelectorAll('.screen');
+  for(var i=0;i<screens.length;i++) screens[i].classList.remove('active');
+  document.getElementById('screen-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderHome() {
+  var html = '';
+  for(var i=0;i<TESTS.length;i++) {
+    var t = TESTS[i];
+    html += '<div class="test-card fade-in" style="animation-delay:'+i*0.08+'s; --tc-grad:'+t.grad+'" onclick="startTest('+i+')">' +
+      '<div class="tc-emoji">'+t.emoji+'</div>' +
+      '<div class="tc-info">' +
+        '<div class="tc-name">'+t.name+'</div>' +
+        '<div class="tc-desc">'+t.desc+'</div>' +
+        '<div class="tc-count">📋 '+t.questions.length+'문항 · 무료</div>' +
+      '</div>' +
+      '<div class="tc-arrow">→</div>' +
+    '</div>';
+  }
+  document.getElementById('tests-grid').innerHTML = html;
+}
+
+function goHome() {
+  S = {testIdx:null, qIdx:0, answers:[], result:null};
+  renderHome();
+  showScreen('home');
+}
+
+function startTest(idx) {
+  S.testIdx=idx; S.qIdx=0; S.answers=[];
+  document.getElementById('q-test-name').textContent = TESTS[idx].name;
+  showScreen('question');
+  renderQ();
+}
+
+function renderQ() {
+  var t=TESTS[S.testIdx], q=t.questions[S.qIdx], total=t.questions.length;
+  document.getElementById('prog-fill').style.width = ((S.qIdx+1)/total*100)+'%';
+  document.getElementById('q-num').textContent = 'Q'+(S.qIdx+1)+' / '+total;
+  document.getElementById('q-text').textContent = q.text;
+  var html='';
+  for(var i=0;i<q.opts.length;i++) {
+    html += '<button class="opt-btn slide-in" style="animation-delay:'+i*0.07+'s" onclick="answer('+i+')">' +
+      '<div class="opt-label">'+String.fromCharCode(65+i)+'</div>' +
+      '<span>'+q.opts[i]+'</span>' +
+    '</button>';
+  }
+  document.getElementById('options').innerHTML = html;
+}
+
+function answer(val) {
+  S.answers.push(val); S.qIdx++;
+  if(S.qIdx >= TESTS[S.testIdx].questions.length) calcResult();
+  else renderQ();
+}
+
+function calcResult() {
+  showScreen('loading');
+  var msgs=['🔮 결과를 분석하는 중...','✨ 당신의 유형을 찾고 있어요...','💫 거의 다 왔어요!'];
+  var i=0;
+  var iv=setInterval(function(){
+    document.getElementById('load-text').textContent = msgs[Math.min(i++,msgs.length-1)];
+  },650);
+  setTimeout(function(){
+    clearInterval(iv);
+    S.result = TESTS[S.testIdx].calculate(S.answers);
+    // URL에 결과 기록 (공유용)
+    var url = new URL(window.location.href);
+    url.searchParams.set('t', S.testIdx);
+    // 결과 key 찾기
+    var _tc = [MBTI, TETO, AURA, LOVE, HSP, WORK, HEALING][S.testIdx];
+    var _rKey = S.result.type;
+    if(_tc) { for(var _k in _tc) { if(_tc[_k] === S.result || _tc[_k].type === S.result.type) { _rKey = _k; break; } } }
+    url.searchParams.set('r', _rKey);
+    window.history.replaceState({}, '', url.toString());
+    // OG 태그 동적 업데이트
+    var r = S.result;
+    if(document.getElementById('page-title')) document.getElementById('page-title').textContent = r.emoji+' 나는 "'+r.type+'" | 마이타입';
+    if(document.getElementById('og-title')) document.getElementById('og-title').setAttribute('content', r.emoji+' 나는 "'+r.type+'"');
+    if(document.getElementById('og-desc')) document.getElementById('og-desc').setAttribute('content', r.subtitle+' — 나도 테스트해보기!');
+    renderResult();
+    showScreen('result');
+  },2100);
+}
+
+function renderResult() {
+  var r=S.result;
+  document.getElementById('res-emoji').textContent=r.emoji;
+  document.getElementById('res-type').textContent=r.type;
+  document.getElementById('res-subtitle').textContent=r.subtitle;
+  document.getElementById('res-teaser').textContent=r.teaser;
+  document.getElementById('locked-wrap').style.display='block';
+  document.getElementById('cpq-notice').style.display='block';
+  document.getElementById('cpq-btn').style.display='flex';
+  document.getElementById('res-full').className='res-full';
+  document.getElementById('res-full').innerHTML='';
+  document.getElementById('share-btn').style.display='none';
+}
+
+function goToCoupang() {
+  window.open(COUPANG_URL,'_blank');
+  setTimeout(unlockResult,900);
+}
+
+function unlockResult() {
+  var r=S.result;
+  document.getElementById('locked-wrap').style.display='none';
+  document.getElementById('cpq-notice').style.display='none';
+  document.getElementById('cpq-btn').style.display='none';
+  var th='';
+  for(var i=0;i<(r.traits||[]).length;i++) th+='<span class="trait'+(i<2?' hi':'')+'">'+r.traits[i]+'</span>';
+  var ms=r.match?'<div class="res-section"><div class="res-sec-title">💞 잘 맞는 유형</div><div class="res-sec-body">'+r.match+'</div></div>':'';
+  var cs=r.career?'<div class="res-section"><div class="res-sec-title">💼 어울리는 직업</div><div class="res-sec-body">'+r.career+'</div></div>':'';
+  var ts=r.tip?'<div class="res-section"><div class="res-sec-title">💡 오늘의 팁</div><div class="res-sec-body">'+r.tip+'</div></div>':'';
+  var full=document.getElementById('res-full');
+  full.innerHTML='<div class="traits">'+th+'</div>'+
+    '<div class="res-section"><div class="res-sec-title">📖 상세 분석</div><div class="res-sec-body">'+r.full+'</div></div>'+ms+cs+ts;
+  full.classList.add('on');
+  document.getElementById('share-btn').style.display='flex';
+}
+
+function shareResult() {
+  var r=S.result, tName=TESTS[S.testIdx].name;
+  // URL 파라미터에 결과 포함
+  var url = new URL(window.location.href);
+  url.searchParams.set('t', S.testIdx);
+  // 결과 key 찾기: 해당 테스트의 타입 컬렉션에서 역조회
+  var typeCollections2 = [MBTI, TETO, AURA, LOVE, HSP, WORK, HEALING];
+  var tc2 = typeCollections2[S.testIdx];
+  var rKey2 = r.type; // fallback
+  if(tc2) { for(var k2 in tc2) { if(tc2[k2] === r || tc2[k2].type === r.type) { rKey2 = k2; break; } } }
+  url.searchParams.set('r', rKey2);
+  var shareUrl = url.toString();
+  var text='✨ 내 '+tName+' 결과: '+r.emoji+' '+r.type+' — '+r.subtitle+'\n나도 테스트 해보기! 👇';
+  if(navigator.share) navigator.share({title:'마이타입 — '+r.type, text:text, url:shareUrl});
+  else if(navigator.clipboard) navigator.clipboard.writeText(shareUrl).then(function(){ alert('결과 링크가 복사됐어요!\n친구들에게 공유해보세요 😊'); });
+  else prompt('아래 링크를 복사해서 공유하세요!', shareUrl);
+}
+
+renderHome();
+
+// 페이지 로드 시 URL 파라미터로 결과 바로 복원
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var t = params.get('t');
+  var rKey = params.get('r');
+  if(t === null || rKey === null) return;
+  var tIdx = parseInt(t);
+  if(isNaN(tIdx) || tIdx < 0 || tIdx >= TESTS.length) return;
+  // 테스트 인덱스 → 실제 타입 컬렉션 변수 매핑
+  var typeCollections = [MBTI, TETO, AURA, LOVE, HSP, WORK, HEALING];
+  var tc = typeCollections[tIdx];
+  if(!tc) return;
+  // key로 직접 찾기 (예: 'ISTJ', 'pure_teto', 'passionate' 등)
+  var foundResult = tc[rKey] || null;
+  if(!foundResult) return;
+  S.testIdx = tIdx;
+  S.result = foundResult;
+  // OG 메타 업데이트
+  if(document.getElementById('page-title')) document.getElementById('page-title').textContent = foundResult.emoji+' 나는 "'+foundResult.type+'" | 마이타입';
+  if(document.getElementById('og-title')) document.getElementById('og-title').setAttribute('content', foundResult.emoji+' 나는 "'+foundResult.type+'"');
+  if(document.getElementById('og-desc')) document.getElementById('og-desc').setAttribute('content', foundResult.subtitle+' — 나도 테스트해보기!');
+  renderResult();
+  showScreen('result');
+})();
+</script>
+</body>
+</html>
