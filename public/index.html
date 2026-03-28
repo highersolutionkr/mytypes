@@ -110,6 +110,46 @@ body { background: var(--bg); color: var(--text); font-family: var(--fbody); min
   font-family: 'Noto Sans KR', sans-serif;
   position: relative; overflow: hidden;
 }
+
+/* 카드 미리보기 오버레이 */
+#card-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.88);
+  align-items: center; justify-content: center;
+  flex-direction: column;
+  padding: 20px;
+}
+#card-overlay.show { display: flex; }
+#card-overlay img {
+  width: 100%; max-width: 340px;
+  border-radius: 20px;
+  box-shadow: 0 0 60px rgba(255,60,172,0.4);
+}
+#card-overlay .overlay-hint {
+  color: rgba(255,255,255,0.7);
+  font-size: 15px;
+  text-align: center;
+  margin-top: 22px;
+  line-height: 1.7;
+}
+#card-overlay .overlay-hint strong {
+  color: #FF3CAC;
+  display: block;
+  font-size: 17px;
+  margin-bottom: 6px;
+}
+#card-overlay .overlay-close {
+  margin-top: 24px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  border-radius: 12px;
+  padding: 13px 36px;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}
 #share-card .sc-orb1 { position:absolute; width:320px; height:320px; background:#FF3CAC; border-radius:50%; filter:blur(90px); opacity:0.25; top:-80px; left:-80px; }
 #share-card .sc-orb2 { position:absolute; width:280px; height:280px; background:#A855F7; border-radius:50%; filter:blur(80px); opacity:0.2; bottom:-60px; right:-60px; }
 #share-card .sc-orb3 { position:absolute; width:220px; height:220px; background:#22D3EE; border-radius:50%; filter:blur(70px); opacity:0.15; bottom:80px; left:-40px; }
@@ -216,6 +256,17 @@ body { background: var(--bg); color: var(--text); font-family: var(--fbody); min
   </div>
 
 </div>
+
+<!-- 카드 미리보기 오버레이 -->
+<div id="card-overlay">
+  <img id="card-preview-img" src="" alt="결과 카드">
+  <div class="overlay-hint">
+    <strong>📸 이미지를 길게 눌러서 저장하세요!</strong>
+    저장 후 인스타그램 스토리나 카카오톡에<br>바로 올릴 수 있어요 😊
+  </div>
+  <button class="overlay-close" onclick="closeCardOverlay()">닫기</button>
+</div>
+
 <script>
 var COUPANG_URL = 'https://link.coupang.com/a/ecXs1J';
 
@@ -574,6 +625,8 @@ function shareResult() {
 
 function saveCard() {
   var r = S.result;
+  var btn = event.target;
+
   // 카드 데이터 채우기
   document.getElementById('sc-emoji').textContent = r.emoji;
   document.getElementById('sc-type').textContent = r.type;
@@ -584,58 +637,76 @@ function saveCard() {
   }
   document.getElementById('sc-traits').innerHTML = traitsHtml;
 
-  // 카드를 화면에 임시로 표시 (html2canvas가 읽을 수 있게)
+  // html2canvas가 읽을 수 있도록 화면 밖에 렌더링
   var wrap = document.getElementById('share-card-wrap');
-  wrap.style.position = 'fixed';
-  wrap.style.left = '-9999px';
-  wrap.style.top = '0';
-  wrap.style.width = 'auto';
-  wrap.style.height = 'auto';
+  wrap.style.cssText = 'position:fixed;left:-9999px;top:0;width:auto;height:auto;overflow:visible;';
 
-  var btn = event.target;
-  btn.textContent = '⏳ 이미지 생성 중...';
+  btn.textContent = '⏳ 생성 중...';
   btn.disabled = true;
 
-  // html2canvas로 캡처
   setTimeout(function() {
     html2canvas(document.getElementById('share-card'), {
       scale: 2,
       useCORS: true,
       backgroundColor: '#09090F',
       width: 600,
-      height: 600
+      height: 600,
+      logging: false
     }).then(function(canvas) {
-      // 다운로드
-      var link = document.createElement('a');
-      link.download = '마이타입_' + r.type.replace(/\s/g,'_') + '.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
+      var imgSrc = canvas.toDataURL('image/png');
 
-      // 모바일에서는 공유 시도
+      // 다시 숨기기
+      wrap.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;';
+
+      btn.textContent = '📸 이미지로 저장하기';
+      btn.disabled = false;
+
+      // 모바일 네이티브 공유 가능하면 공유 시트 열기
       if(navigator.share && navigator.canShare) {
         canvas.toBlob(function(blob) {
           var file = new File([blob], '마이타입_결과.png', {type:'image/png'});
           if(navigator.canShare({files:[file]})) {
-            navigator.share({files:[file], title:'나의 마이타입 결과', text:r.emoji+' '+r.type+' — '+r.subtitle});
+            navigator.share({
+              files: [file],
+              title: r.emoji + ' 나는 "' + r.type + '"',
+              text: r.subtitle + ' — mytypes.netlify.app'
+            });
+            return;
           }
+          // 공유 불가시 오버레이 표시
+          showCardOverlay(imgSrc);
         });
+      } else {
+        // PC or 미지원: 오버레이로 표시
+        showCardOverlay(imgSrc);
       }
-
-      // 카드 다시 숨기기
-      wrap.style.position = 'fixed';
-      wrap.style.left = '-9999px';
-      wrap.style.top = '-9999px';
-      wrap.style.width = '1px';
-      wrap.style.height = '1px';
-
+    }).catch(function() {
+      wrap.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;';
       btn.textContent = '📸 이미지로 저장하기';
       btn.disabled = false;
-    }).catch(function(e) {
-      alert('이미지 생성에 실패했어요. 스크린샷을 이용해주세요.');
-      btn.textContent = '📸 이미지로 저장하기';
-      btn.disabled = false;
+      // 실패시 오버레이에 안내
+      showCardOverlay(null);
     });
-  }, 100);
+  }, 150);
+}
+
+function showCardOverlay(imgSrc) {
+  var overlay = document.getElementById('card-overlay');
+  var img = document.getElementById('card-preview-img');
+  if(imgSrc) {
+    img.src = imgSrc;
+    img.style.display = 'block';
+  } else {
+    img.style.display = 'none';
+  }
+  overlay.classList.add('show');
+  // 스크롤 막기
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCardOverlay() {
+  document.getElementById('card-overlay').classList.remove('show');
+  document.body.style.overflow = '';
 }
 
 renderHome();
