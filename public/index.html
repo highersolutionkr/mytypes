@@ -99,70 +99,35 @@ body { background: var(--bg); color: var(--text); font-family: var(--fbody); min
 .footer { text-align: center; color: var(--muted); font-size: 0.72rem; margin-top: 64px; padding-top: 18px; border-top: 1px solid var(--card-border); line-height: 1.8; }
 @media (max-width: 480px) { .q-text { font-size: 1.1rem; } .res-type { font-size: 2rem; } .res-emoji { font-size: 4rem; } }
 
-/* 이미지 저장 카드 */
-#share-card-wrap { position:fixed; left:-9999px; top:-9999px; width:1px; height:1px; overflow:hidden; }
-#share-card {
-  width: 600px; height: 600px;
-  background: #09090F;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 50px 48px;
-  font-family: 'Noto Sans KR', sans-serif;
-  position: relative; overflow: hidden;
-}
-
-/* 카드 미리보기 오버레이 */
+/* 카드 오버레이 */
 #card-overlay {
-  display: none;
-  position: fixed; inset: 0; z-index: 9999;
-  background: rgba(0,0,0,0.88);
+  display: none; position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.92);
   align-items: center; justify-content: center;
-  flex-direction: column;
-  padding: 20px;
+  flex-direction: column; padding: 24px;
 }
 #card-overlay.show { display: flex; }
-#card-overlay img {
-  width: 100%; max-width: 340px;
-  border-radius: 20px;
-  box-shadow: 0 0 60px rgba(255,60,172,0.4);
+#css-card {
+  width: 100%; max-width: 320px; background: #09090F;
+  border-radius: 24px; padding: 36px 28px; text-align: center;
+  position: relative; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 0 60px rgba(255,60,172,0.35);
 }
-#card-overlay .overlay-hint {
-  color: rgba(255,255,255,0.7);
-  font-size: 15px;
-  text-align: center;
-  margin-top: 22px;
-  line-height: 1.7;
-}
-#card-overlay .overlay-hint strong {
-  color: #FF3CAC;
-  display: block;
-  font-size: 17px;
-  margin-bottom: 6px;
-}
-#card-overlay .overlay-close {
-  margin-top: 24px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: #fff;
-  border-radius: 12px;
-  padding: 13px 36px;
-  font-size: 15px;
-  cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
-}
-#share-card .sc-orb1 { position:absolute; width:320px; height:320px; background:#FF3CAC; border-radius:50%; filter:blur(90px); opacity:0.25; top:-80px; left:-80px; }
-#share-card .sc-orb2 { position:absolute; width:280px; height:280px; background:#A855F7; border-radius:50%; filter:blur(80px); opacity:0.2; bottom:-60px; right:-60px; }
-#share-card .sc-orb3 { position:absolute; width:220px; height:220px; background:#22D3EE; border-radius:50%; filter:blur(70px); opacity:0.15; bottom:80px; left:-40px; }
-#share-card .sc-inner { position:relative; z-index:1; text-align:center; width:100%; }
-#share-card .sc-site { font-size:13px; color:rgba(240,238,255,0.4); letter-spacing:0.08em; margin-bottom:28px; }
-#share-card .sc-emoji { font-size:88px; margin-bottom:18px; display:block; }
-#share-card .sc-type { font-size:38px; font-weight:900; background:linear-gradient(135deg,#FF3CAC,#A855F7,#22D3EE); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:12px; line-height:1.2; }
-#share-card .sc-subtitle { font-size:17px; color:rgba(240,238,255,0.65); margin-bottom:28px; }
-#share-card .sc-traits { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:30px; }
-#share-card .sc-trait { background:rgba(255,60,172,0.15); border:1px solid rgba(255,60,172,0.35); border-radius:100px; padding:5px 15px; font-size:13px; color:#FF3CAC; }
-#share-card .sc-bottom { font-size:12px; color:rgba(240,238,255,0.3); letter-spacing:0.05em; }
-
-/* 버튼 그룹 */
+#css-card .cc-orb1 { position:absolute;width:200px;height:200px;background:#FF3CAC;border-radius:50%;filter:blur(70px);opacity:0.22;top:-60px;left:-60px;pointer-events:none; }
+#css-card .cc-orb2 { position:absolute;width:180px;height:180px;background:#A855F7;border-radius:50%;filter:blur(60px);opacity:0.18;bottom:-50px;right:-50px;pointer-events:none; }
+#css-card .cc-orb3 { position:absolute;width:150px;height:150px;background:#22D3EE;border-radius:50%;filter:blur(55px);opacity:0.13;bottom:40px;left:-30px;pointer-events:none; }
+#css-card .cc-inner { position:relative; z-index:1; }
+#css-card .cc-site { font-size:11px;color:rgba(240,238,255,0.35);letter-spacing:0.1em;margin-bottom:20px; }
+#css-card .cc-emoji { font-size:72px;display:block;margin-bottom:14px; }
+#css-card .cc-type { font-size:26px;font-weight:900;background:linear-gradient(135deg,#FF3CAC,#A855F7,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;line-height:1.2; }
+#css-card .cc-subtitle { font-size:14px;color:rgba(240,238,255,0.6);margin-bottom:20px; }
+#css-card .cc-traits { display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:20px; }
+#css-card .cc-trait { background:rgba(255,60,172,0.15);border:1px solid rgba(255,60,172,0.3);border-radius:100px;padding:4px 12px;font-size:12px;color:#FF3CAC; }
+#css-card .cc-bottom { font-size:11px;color:rgba(240,238,255,0.25);letter-spacing:0.04em; }
+.overlay-hint { color:rgba(255,255,255,0.65);font-size:14px;text-align:center;margin-top:18px;line-height:1.7; }
+.overlay-hint strong { color:#FF3CAC;display:block;font-size:16px;margin-bottom:4px; }
+.overlay-close { margin-top:20px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);color:#fff;border-radius:12px;padding:12px 32px;font-size:14px;cursor:pointer;font-family:'Noto Sans KR',sans-serif; }
 .share-btn-group { display:none; flex-direction:column; gap:10px; margin-top:10px; }
 .share-btn-group.on { display:flex; }
 .btn-save { background:linear-gradient(135deg,#22D3EE,#A855F7); box-shadow:0 8px 28px rgba(168,85,247,0.38); }
@@ -235,22 +200,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--fbody); min
         <button class="btn btn-share" onclick="shareResult()">🔗 링크 공유하기</button>
       </div>
 
-      <!-- 숨겨진 이미지 카드 (html2canvas용) -->
-      <div id="share-card-wrap">
-        <div id="share-card">
-          <div class="sc-orb1"></div>
-          <div class="sc-orb2"></div>
-          <div class="sc-orb3"></div>
-          <div class="sc-inner">
-            <div class="sc-site">✨ MYTYPES.NETLIFY.APP</div>
-            <span class="sc-emoji" id="sc-emoji"></span>
-            <div class="sc-type" id="sc-type"></div>
-            <div class="sc-subtitle" id="sc-subtitle"></div>
-            <div class="sc-traits" id="sc-traits"></div>
-            <div class="sc-bottom">나의 유형을 알아보세요 → mytypes.netlify.app</div>
-          </div>
-        </div>
-      </div>
+
     </div>
     <button class="btn btn-home" onclick="goHome()">🏠 다른 테스트 해보기</button>
   </div>
@@ -259,10 +209,23 @@ body { background: var(--bg); color: var(--text); font-family: var(--fbody); min
 
 <!-- 카드 미리보기 오버레이 -->
 <div id="card-overlay">
-  <img id="card-preview-img" src="" alt="결과 카드">
+  <div id="css-card">
+    <div class="cc-orb1"></div>
+    <div class="cc-orb2"></div>
+    <div class="cc-orb3"></div>
+    <div class="cc-inner">
+      <div class="cc-site">✨ MYTYPES.NETLIFY.APP</div>
+      <span class="cc-emoji" id="cc-emoji"></span>
+      <div class="cc-type" id="cc-type"></div>
+      <div class="cc-subtitle" id="cc-subtitle"></div>
+      <div class="cc-traits" id="cc-traits"></div>
+      <div class="cc-bottom">나의 유형을 알아보세요 → mytypes.netlify.app</div>
+    </div>
+  </div>
   <div class="overlay-hint">
-    <strong>📸 이미지를 길게 눌러서 저장하세요!</strong>
-    저장 후 인스타그램 스토리나 카카오톡에<br>바로 올릴 수 있어요 😊
+    <strong>📸 화면을 캡처해서 저장하세요!</strong>
+    인스타그램 스토리나 카카오톡에 바로 올릴 수 있어요 😊<br>
+    <span style="font-size:12px;opacity:0.6">iOS: 측면버튼+볼륨업 / 안드로이드: 전원+볼륨다운</span>
   </div>
   <button class="overlay-close" onclick="closeCardOverlay()">닫기</button>
 </div>
@@ -625,82 +588,17 @@ function shareResult() {
 
 function saveCard() {
   var r = S.result;
-  var btn = event.target;
-
-  // 카드 데이터 채우기
-  document.getElementById('sc-emoji').textContent = r.emoji;
-  document.getElementById('sc-type').textContent = r.type;
-  document.getElementById('sc-subtitle').textContent = r.subtitle;
+  // CSS 카드에 데이터 채우기
+  document.getElementById('cc-emoji').textContent = r.emoji;
+  document.getElementById('cc-type').textContent = r.type;
+  document.getElementById('cc-subtitle').textContent = r.subtitle;
   var traitsHtml = '';
   for(var i=0; i<Math.min((r.traits||[]).length, 4); i++) {
-    traitsHtml += '<span class="sc-trait">'+r.traits[i]+'</span>';
+    traitsHtml += '<span class="cc-trait">'+r.traits[i]+'</span>';
   }
-  document.getElementById('sc-traits').innerHTML = traitsHtml;
-
-  // html2canvas가 읽을 수 있도록 화면 밖에 렌더링
-  var wrap = document.getElementById('share-card-wrap');
-  wrap.style.cssText = 'position:fixed;left:-9999px;top:0;width:auto;height:auto;overflow:visible;';
-
-  btn.textContent = '⏳ 생성 중...';
-  btn.disabled = true;
-
-  setTimeout(function() {
-    html2canvas(document.getElementById('share-card'), {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: '#09090F',
-      width: 600,
-      height: 600,
-      logging: false
-    }).then(function(canvas) {
-      var imgSrc = canvas.toDataURL('image/png');
-
-      // 다시 숨기기
-      wrap.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;';
-
-      btn.textContent = '📸 이미지로 저장하기';
-      btn.disabled = false;
-
-      // 모바일 네이티브 공유 가능하면 공유 시트 열기
-      if(navigator.share && navigator.canShare) {
-        canvas.toBlob(function(blob) {
-          var file = new File([blob], '마이타입_결과.png', {type:'image/png'});
-          if(navigator.canShare({files:[file]})) {
-            navigator.share({
-              files: [file],
-              title: r.emoji + ' 나는 "' + r.type + '"',
-              text: r.subtitle + ' — mytypes.netlify.app'
-            });
-            return;
-          }
-          // 공유 불가시 오버레이 표시
-          showCardOverlay(imgSrc);
-        });
-      } else {
-        // PC or 미지원: 오버레이로 표시
-        showCardOverlay(imgSrc);
-      }
-    }).catch(function() {
-      wrap.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;';
-      btn.textContent = '📸 이미지로 저장하기';
-      btn.disabled = false;
-      // 실패시 오버레이에 안내
-      showCardOverlay(null);
-    });
-  }, 150);
-}
-
-function showCardOverlay(imgSrc) {
-  var overlay = document.getElementById('card-overlay');
-  var img = document.getElementById('card-preview-img');
-  if(imgSrc) {
-    img.src = imgSrc;
-    img.style.display = 'block';
-  } else {
-    img.style.display = 'none';
-  }
-  overlay.classList.add('show');
-  // 스크롤 막기
+  document.getElementById('cc-traits').innerHTML = traitsHtml;
+  // 오버레이 표시
+  document.getElementById('card-overlay').classList.add('show');
   document.body.style.overflow = 'hidden';
 }
 
@@ -733,6 +631,5 @@ renderHome();
   showScreen('result');
 })();
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>
