@@ -3,10 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta id="og-title" property="og:title" content="마이타입 — 나를 알아가는 심리테스트">
-<meta id="og-desc" property="og:description" content="MBTI, 테토에겐, 오라, 연애, HSP, 직장인, 힐링 유형 테스트">
-<meta property="og:type" content="website">
-<title id="page-title">✨ 마이타입 — 나를 알아가는 심리테스트</title>
+<title>✨ 마이타입 — 나를 알아가는 심리테스트</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -101,6 +98,35 @@ body { background: var(--bg); color: var(--text); font-family: var(--fbody); min
 @keyframes slideIn { from { opacity:0; transform:translateX(22px); } to { opacity:1; transform:translateX(0); } }
 .footer { text-align: center; color: var(--muted); font-size: 0.72rem; margin-top: 64px; padding-top: 18px; border-top: 1px solid var(--card-border); line-height: 1.8; }
 @media (max-width: 480px) { .q-text { font-size: 1.1rem; } .res-type { font-size: 2rem; } .res-emoji { font-size: 4rem; } }
+
+/* 이미지 저장 카드 */
+#share-card-wrap { position:fixed; left:-9999px; top:-9999px; width:1px; height:1px; overflow:hidden; }
+#share-card {
+  width: 600px; height: 600px;
+  background: #09090F;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 50px 48px;
+  font-family: 'Noto Sans KR', sans-serif;
+  position: relative; overflow: hidden;
+}
+#share-card .sc-orb1 { position:absolute; width:320px; height:320px; background:#FF3CAC; border-radius:50%; filter:blur(90px); opacity:0.25; top:-80px; left:-80px; }
+#share-card .sc-orb2 { position:absolute; width:280px; height:280px; background:#A855F7; border-radius:50%; filter:blur(80px); opacity:0.2; bottom:-60px; right:-60px; }
+#share-card .sc-orb3 { position:absolute; width:220px; height:220px; background:#22D3EE; border-radius:50%; filter:blur(70px); opacity:0.15; bottom:80px; left:-40px; }
+#share-card .sc-inner { position:relative; z-index:1; text-align:center; width:100%; }
+#share-card .sc-site { font-size:13px; color:rgba(240,238,255,0.4); letter-spacing:0.08em; margin-bottom:28px; }
+#share-card .sc-emoji { font-size:88px; margin-bottom:18px; display:block; }
+#share-card .sc-type { font-size:38px; font-weight:900; background:linear-gradient(135deg,#FF3CAC,#A855F7,#22D3EE); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:12px; line-height:1.2; }
+#share-card .sc-subtitle { font-size:17px; color:rgba(240,238,255,0.65); margin-bottom:28px; }
+#share-card .sc-traits { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:30px; }
+#share-card .sc-trait { background:rgba(255,60,172,0.15); border:1px solid rgba(255,60,172,0.35); border-radius:100px; padding:5px 15px; font-size:13px; color:#FF3CAC; }
+#share-card .sc-bottom { font-size:12px; color:rgba(240,238,255,0.3); letter-spacing:0.05em; }
+
+/* 버튼 그룹 */
+.share-btn-group { display:none; flex-direction:column; gap:10px; margin-top:10px; }
+.share-btn-group.on { display:flex; }
+.btn-save { background:linear-gradient(135deg,#22D3EE,#A855F7); box-shadow:0 8px 28px rgba(168,85,247,0.38); }
+.btn-save:hover { transform:translateY(-2px); box-shadow:0 14px 40px rgba(168,85,247,0.5); }
 </style>
 </head>
 <body>
@@ -163,14 +189,35 @@ body { background: var(--bg); color: var(--text); font-family: var(--fbody); min
       </p>
       <button class="btn btn-coupang" id="cpq-btn" onclick="goToCoupang()">🛍️ 쿠팡으로 이동하고 결과 확인하기</button>
       <div class="res-full" id="res-full"></div>
-      <button class="btn btn-share" id="share-btn" style="display:none" onclick="shareResult()">🔗 결과 공유하기</button>
+      <!-- 공유 버튼 그룹 -->
+      <div class="share-btn-group" id="share-btn-group">
+        <button class="btn btn-save" onclick="saveCard()">📸 이미지로 저장하기</button>
+        <button class="btn btn-share" onclick="shareResult()">🔗 링크 공유하기</button>
+      </div>
+
+      <!-- 숨겨진 이미지 카드 (html2canvas용) -->
+      <div id="share-card-wrap">
+        <div id="share-card">
+          <div class="sc-orb1"></div>
+          <div class="sc-orb2"></div>
+          <div class="sc-orb3"></div>
+          <div class="sc-inner">
+            <div class="sc-site">✨ MYTYPES.NETLIFY.APP</div>
+            <span class="sc-emoji" id="sc-emoji"></span>
+            <div class="sc-type" id="sc-type"></div>
+            <div class="sc-subtitle" id="sc-subtitle"></div>
+            <div class="sc-traits" id="sc-traits"></div>
+            <div class="sc-bottom">나의 유형을 알아보세요 → mytypes.netlify.app</div>
+          </div>
+        </div>
+      </div>
     </div>
     <button class="btn btn-home" onclick="goHome()">🏠 다른 테스트 해보기</button>
   </div>
 
 </div>
 <script>
-var COUPANG_URL = 'https://link.coupang.com/a/ecVgFa';
+var COUPANG_URL = 'https://link.coupang.com/a/ecXs1J';
 
 var TESTS = [
   {
@@ -467,20 +514,6 @@ function calcResult() {
   setTimeout(function(){
     clearInterval(iv);
     S.result = TESTS[S.testIdx].calculate(S.answers);
-    // URL에 결과 기록 (공유용)
-    var url = new URL(window.location.href);
-    url.searchParams.set('t', S.testIdx);
-    // 결과 key 찾기
-    var _tc = [MBTI, TETO, AURA, LOVE, HSP, WORK, HEALING][S.testIdx];
-    var _rKey = S.result.type;
-    if(_tc) { for(var _k in _tc) { if(_tc[_k] === S.result || _tc[_k].type === S.result.type) { _rKey = _k; break; } } }
-    url.searchParams.set('r', _rKey);
-    window.history.replaceState({}, '', url.toString());
-    // OG 태그 동적 업데이트
-    var r = S.result;
-    if(document.getElementById('page-title')) document.getElementById('page-title').textContent = r.emoji+' 나는 "'+r.type+'" | 마이타입';
-    if(document.getElementById('og-title')) document.getElementById('og-title').setAttribute('content', r.emoji+' 나는 "'+r.type+'"');
-    if(document.getElementById('og-desc')) document.getElementById('og-desc').setAttribute('content', r.subtitle+' — 나도 테스트해보기!');
     renderResult();
     showScreen('result');
   },2100);
@@ -519,19 +552,18 @@ function unlockResult() {
   full.innerHTML='<div class="traits">'+th+'</div>'+
     '<div class="res-section"><div class="res-sec-title">📖 상세 분석</div><div class="res-sec-body">'+r.full+'</div></div>'+ms+cs+ts;
   full.classList.add('on');
-  document.getElementById('share-btn').style.display='flex';
+  document.getElementById('share-btn-group').classList.add('on');
 }
 
 function shareResult() {
   var r=S.result, tName=TESTS[S.testIdx].name;
   // URL 파라미터에 결과 포함
   var url = new URL(window.location.href);
-  url.searchParams.set('t', S.testIdx);
-  // 결과 key 찾기: 해당 테스트의 타입 컬렉션에서 역조회
   var typeCollections2 = [MBTI, TETO, AURA, LOVE, HSP, WORK, HEALING];
   var tc2 = typeCollections2[S.testIdx];
-  var rKey2 = r.type; // fallback
+  var rKey2 = r.type;
   if(tc2) { for(var k2 in tc2) { if(tc2[k2] === r || tc2[k2].type === r.type) { rKey2 = k2; break; } } }
+  url.searchParams.set('t', S.testIdx);
   url.searchParams.set('r', rKey2);
   var shareUrl = url.toString();
   var text='✨ 내 '+tName+' 결과: '+r.emoji+' '+r.type+' — '+r.subtitle+'\n나도 테스트 해보기! 👇';
@@ -540,9 +572,75 @@ function shareResult() {
   else prompt('아래 링크를 복사해서 공유하세요!', shareUrl);
 }
 
+function saveCard() {
+  var r = S.result;
+  // 카드 데이터 채우기
+  document.getElementById('sc-emoji').textContent = r.emoji;
+  document.getElementById('sc-type').textContent = r.type;
+  document.getElementById('sc-subtitle').textContent = r.subtitle;
+  var traitsHtml = '';
+  for(var i=0; i<Math.min((r.traits||[]).length, 4); i++) {
+    traitsHtml += '<span class="sc-trait">'+r.traits[i]+'</span>';
+  }
+  document.getElementById('sc-traits').innerHTML = traitsHtml;
+
+  // 카드를 화면에 임시로 표시 (html2canvas가 읽을 수 있게)
+  var wrap = document.getElementById('share-card-wrap');
+  wrap.style.position = 'fixed';
+  wrap.style.left = '-9999px';
+  wrap.style.top = '0';
+  wrap.style.width = 'auto';
+  wrap.style.height = 'auto';
+
+  var btn = event.target;
+  btn.textContent = '⏳ 이미지 생성 중...';
+  btn.disabled = true;
+
+  // html2canvas로 캡처
+  setTimeout(function() {
+    html2canvas(document.getElementById('share-card'), {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#09090F',
+      width: 600,
+      height: 600
+    }).then(function(canvas) {
+      // 다운로드
+      var link = document.createElement('a');
+      link.download = '마이타입_' + r.type.replace(/\s/g,'_') + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+
+      // 모바일에서는 공유 시도
+      if(navigator.share && navigator.canShare) {
+        canvas.toBlob(function(blob) {
+          var file = new File([blob], '마이타입_결과.png', {type:'image/png'});
+          if(navigator.canShare({files:[file]})) {
+            navigator.share({files:[file], title:'나의 마이타입 결과', text:r.emoji+' '+r.type+' — '+r.subtitle});
+          }
+        });
+      }
+
+      // 카드 다시 숨기기
+      wrap.style.position = 'fixed';
+      wrap.style.left = '-9999px';
+      wrap.style.top = '-9999px';
+      wrap.style.width = '1px';
+      wrap.style.height = '1px';
+
+      btn.textContent = '📸 이미지로 저장하기';
+      btn.disabled = false;
+    }).catch(function(e) {
+      alert('이미지 생성에 실패했어요. 스크린샷을 이용해주세요.');
+      btn.textContent = '📸 이미지로 저장하기';
+      btn.disabled = false;
+    });
+  }, 100);
+}
+
 renderHome();
 
-// 페이지 로드 시 URL 파라미터로 결과 바로 복원
+// URL 파라미터 복원
 (function() {
   var params = new URLSearchParams(window.location.search);
   var t = params.get('t');
@@ -550,16 +648,13 @@ renderHome();
   if(t === null || rKey === null) return;
   var tIdx = parseInt(t);
   if(isNaN(tIdx) || tIdx < 0 || tIdx >= TESTS.length) return;
-  // 테스트 인덱스 → 실제 타입 컬렉션 변수 매핑
   var typeCollections = [MBTI, TETO, AURA, LOVE, HSP, WORK, HEALING];
   var tc = typeCollections[tIdx];
   if(!tc) return;
-  // key로 직접 찾기 (예: 'ISTJ', 'pure_teto', 'passionate' 등)
   var foundResult = tc[rKey] || null;
   if(!foundResult) return;
   S.testIdx = tIdx;
   S.result = foundResult;
-  // OG 메타 업데이트
   if(document.getElementById('page-title')) document.getElementById('page-title').textContent = foundResult.emoji+' 나는 "'+foundResult.type+'" | 마이타입';
   if(document.getElementById('og-title')) document.getElementById('og-title').setAttribute('content', foundResult.emoji+' 나는 "'+foundResult.type+'"');
   if(document.getElementById('og-desc')) document.getElementById('og-desc').setAttribute('content', foundResult.subtitle+' — 나도 테스트해보기!');
@@ -567,5 +662,6 @@ renderHome();
   showScreen('result');
 })();
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>
