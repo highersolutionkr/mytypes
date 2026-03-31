@@ -55,6 +55,12 @@ const TYPE_COLLECTIONS = [
     sensory:{emoji:'🍽️',type:'감각 충전형',subtitle:'오감으로 즐기는 힐링'},
     escape:{emoji:'✈️',type:'일탈 탈출형',subtitle:'새로운 곳에서 리셋!'},
   },
+  { // 7: 직장인 멘탈
+    ironmental:{emoji:'🪨',type:'철벽 멘탈형',subtitle:'어지간한 건 다 씹어먹는다'},
+    hidden:{emoji:'🎭',type:'속앓이 참을인형',subtitle:'밖에선 웃고 안에서 삭힌다'},
+    honest:{emoji:'🗣️',type:'직언 솔직형',subtitle:'할 말은 하고 살아야 직성이 풀린다'},
+    burnout:{emoji:'🥀',type:'번아웃 위험형',subtitle:'지금 당장 쉬어야 해요'},
+  },
 ];
 
 const BOT_UA = [
