@@ -133,6 +133,10 @@ body { background: var(--bg); color: var(--text); font-family: var(--fbody); min
 .btn-save { background:linear-gradient(135deg,#22D3EE,#A855F7); box-shadow:0 8px 28px rgba(168,85,247,0.38); }
 .btn-save:hover { transform:translateY(-2px); box-shadow:0 14px 40px rgba(168,85,247,0.5); }
 </style>
+  <!-- 구글 애드센스 승인 후 아래 주석 해제 -->
+  <!--
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-여기에본인ID입력" crossorigin="anonymous"></script>
+  -->
 </head>
 <body>
 <div class="orb o1"></div>
@@ -148,6 +152,18 @@ body { background: var(--bg); color: var(--text); font-family: var(--fbody); min
     </header>
     <div class="sec-label">지금 인기 테스트</div>
     <div class="tests-grid" id="tests-grid"></div>
+    <!-- 구글 애드센스 광고 영역 (승인 후 아래 주석 해제) -->
+    <!--
+    <div class="ad-wrap">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-여기에본인ID입력"
+           data-ad-slot="여기에슬롯ID입력"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+    -->
     <footer class="footer">
       <p>✨ 마이타입 | 나를 알아가는 심리테스트</p>
       <p>이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
@@ -231,7 +247,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--fbody); min
 </div>
 
 <script>
-var COUPANG_URL = 'https://link.coupang.com/a/ecXs1J';
+var COUPANG_URL = 'https://link.coupang.com/a/efgY3x';
 
 var TESTS = [
   {
@@ -393,6 +409,29 @@ var TESTS = [
       var mx=0; for(var i=1;i<5;i++) if(c[i]>c[mx]) mx=i;
       return HEALING[keys[mx]];
     }
+  },
+  {
+    id:'mental', name:'직장인 멘탈 테스트', emoji:'🧘',
+    desc:'직장 생활에서 내 멘탈은 얼마나 단단할까? 나의 직장인 멘탈 유형을 알아보세요.',
+    grad:'linear-gradient(135deg, rgba(52,211,153,0.12), rgba(251,191,36,0.12))',
+    questions:[
+      {text:'월요일 아침 출근길, 내 마음은?', opts:['그냥 가는 거지 뭐, 덤덤하다','생각만 해도 심장이 두근거린다','이번 주도 파이팅! 나름 설렌다','몸이 무겁고 머리가 아프다']},
+      {text:'상사에게 갑자기 호출당했을 때?', opts:['무슨 일이지? 하고 가볍게 간다','심장이 쿵 내려앉는다','뭔가 또 일이 생겼구나 싶다','최악의 상황부터 머릿속에 떠오른다']},
+      {text:'야근이 생겼을 때 나는?', opts:['어쩔 수 없지, 그냥 한다','속으로 화가 나지만 티 안 낸다','솔직하게 힘들다고 표현한다','극도로 스트레스를 받는다']},
+      {text:'동료가 내 실수를 지적했을 때?', opts:['고맙다, 몰랐던 거 알았네','창피하고 한동안 신경 쓰인다','괜찮아, 수정하면 되지','그 생각이 며칠씩 머릿속을 맴돈다']},
+      {text:'업무 중 갑자기 큰 실수를 했을 때?', opts:['일단 수습하고 원인부터 찾는다','너무 당황해서 판단력이 흐려진다','주변에 솔직하게 말하고 도움 요청','한참 자책하다 겨우 털어낸다']},
+      {text:'회식 참석 강요를 받았을 때?', opts:['적당히 즐기고 일찍 빠진다','거절 못하고 끝까지 있는다','솔직하게 선약 있다고 말한다','며칠 전부터 스트레스를 받는다']},
+      {text:'번아웃이 올 것 같을 때 나는?', opts:['휴가 내고 진짜 쉰다','억지로 버티며 계속 일한다','운동이나 취미로 기분 전환','그냥 방치하다 쓰러진다']},
+      {text:'직장 동료와 갈등이 생겼을 때?', opts:['직접 대화로 풀려고 한다','속으로 삭히고 거리를 둔다','제3자에게 털어놓고 조언 구한다','잠을 못 잘 만큼 오래 걱정한다']},
+      {text:'부당한 업무 지시를 받았을 때?', opts:['이유를 물어보고 조율한다','싫어도 그냥 한다','정중하게 거절 의사를 밝힌다','스트레스는 받지만 침묵한다']},
+      {text:'퇴근 후 일 생각이 떠오를 때?', opts:['일과 시간이 아니니 잊으려 노력','나도 모르게 계속 생각하게 된다','적당히 생각하고 내일 처리','업무 생각으로 잠을 못 자기도 한다']}
+    ],
+    calculate:function(a){
+      var c=[0,0,0,0]; for(var i=0;i<a.length;i++) c[a[i]]++;
+      var keys=['ironmental','hidden','honest','burnout'];
+      var mx=0; for(var i=1;i<4;i++) if(c[i]>c[mx]) mx=i;
+      return MENTAL[keys[mx]];
+    }
   }
 ];
 
@@ -456,6 +495,13 @@ var HEALING = {
   active:{emoji:'🏃',type:'액티브 활동형',subtitle:'몸을 움직여야 풀린다!',teaser:'운동하고 땀 흘려야 진짜 힐링이 되는 액티브한 타입! 몸이 건강해야 마음도 건강해요.',traits:['활동적','건강관리','의지력','체력','긍정적'],full:'신체 활동을 통해 스트레스를 해소하고 에너지를 충전하는 타입이에요. 운동 후 분비되는 엔도르핀이 최고의 힐링제예요. 걷기, 러닝, 요가, 클라이밍 등 자신에게 맞는 활동을 꾸준히 유지하는 것이 장기적인 행복의 열쇠예요.',match:'같은 활동형, 또는 건강에 관심 있는 사람',tip:'하루 20분이라도 몸을 움직이는 것이 항우울제보다 효과적이에요'},
   sensory:{emoji:'🍽️',type:'감각 충전형',subtitle:'오감으로 즐기는 힐링',teaser:'맛있는 것 먹고, 좋은 향기 맡고, 예쁜 것 보면서 힐링하는 감각적인 타입이에요!',traits:['감각적','미식가','심미안','즉흥적','현재지향'],full:'맛, 향, 시각, 촉각 등 오감의 즐거움에서 깊은 만족과 힐링을 경험하는 타입이에요. 맛집 탐방, 카페 탐방, 향기로운 입욕제, 예쁜 뷰티 제품, 아름다운 인테리어 등이 진정한 힐링이에요. 현재 순간의 감각적 즐거움에 충실한 건강한 쾌락주의자예요.',match:'같은 미식가형, 또는 새로운 경험을 즐기는 사람',tip:'한 달에 한 번은 꼭 가보고 싶었던 맛집에 자신을 위한 데이트를 해보세요'},
   escape:{emoji:'✈️',type:'일탈 탈출형',subtitle:'새로운 곳에서 리셋!',teaser:'일상을 벗어나 새로운 자극을 받아야 충전되는 자유로운 영혼! 여행이 최고의 힐링이에요.',traits:['모험심','자유로움','호기심','즉흥성','개방성'],full:'익숙한 환경에서 벗어나 새로운 장소, 경험, 자극을 통해 리셋하는 타입이에요. 멀리 떠나는 여행이 아니더라도 새로운 동네 카페, 처음 가는 전시회, 즉흥 드라이브만으로도 큰 힐링이 돼요. 일상에 작은 새로움을 자주 넣어주는 것이 스트레스 관리의 핵심이에요.',match:'같은 모험형, 또는 함께 여행가기 좋은 사람',tip:'버킷리스트를 만들고 한 달에 하나씩 도전해보세요'}
+};
+
+var MENTAL = {
+  ironmental:{emoji:'🪨',type:'철벽 멘탈형',subtitle:'어지간한 건 다 씹어먹는다',teaser:'직장 생활의 온갖 풍파에도 흔들리지 않는 강철 멘탈의 소유자! 당신 곁에 있으면 든든해요.',traits:['강한 멘탈','문제해결력','냉철함','자기관리','회복탄력성'],full:'어떤 상황에서도 감정에 휘둘리지 않고 차분하게 대처하는 능력이 탁월해요. 실수해도 빠르게 수습하고, 부당한 상황에도 전략적으로 움직입니다. 타인이 무너질 때 오히려 중심을 잡아주는 조직의 버팀목 역할을 자연스럽게 하게 되는 유형이에요. 다만 너무 혼자 다 감당하려 하지 말고, 가끔은 주변에 기대는 것도 힘이 된다는 걸 기억하세요!',match:'어떤 동료와도 잘 맞아요',tip:'완벽하게 버티는 것보다 지속 가능하게 버티는 게 진짜 강함이에요'},
+  hidden:{emoji:'🎭',type:'속앓이 참을인형',subtitle:'밖에선 웃고 안에서 삭힌다',teaser:'겉으론 괜찮아 보이지만 속으로는 혼자 다 삭이는 타입! 그 감정들을 꼭 해소해줘야 해요.',traits:['인내심','눈치','배려심','자기억제','성실함'],full:'갈등을 피하고 싶어서, 혹은 민폐를 끼치기 싫어서 감정을 내색하지 않는 타입이에요. 속으로는 꽤 힘들지만 "저 괜찮아요"가 입에 붙어 있어요. 장기적으로는 억압된 감정이 번아웃이나 갑작스러운 폭발로 이어질 수 있어요. 신뢰할 수 있는 사람에게 조금씩 털어놓는 연습이 필요해요.',match:'감정을 수용해주는 따뜻한 동료',tip:'하루 5분이라도 일기를 써보세요 — 감정을 글로 내보내는 것만으로도 큰 해소가 돼요'},
+  honest:{emoji:'🗣️',type:'직언 솔직형',subtitle:'할 말은 하고 살아야 직성이 풀린다',teaser:'부당한 건 부당하다고, 힘든 건 힘들다고 말하는 쿨한 직장인! 자기 감정에 솔직한 타입이에요.',traits:['솔직함','자기표현','용기','명확한 경계','자기존중'],full:'감정과 의견을 적절하게 표현할 줄 아는 건강한 소통 방식을 가지고 있어요. 무리한 요구에 거절할 수 있고, 힘들 땐 도움을 요청할 수 있어요. 이런 솔직함이 때로는 주변과 마찰을 일으키기도 하지만, 장기적으로는 가장 건강한 직장 생활의 기반이 됩니다. 표현하는 타이밍과 방식을 다듬으면 더욱 강력한 무기가 돼요.',match:'열린 소통 문화의 조직, 배려 있는 동료',tip:'솔직함에 따뜻함을 한 스푼 더하면 최강의 소통 능력이 완성돼요'},
+  burnout:{emoji:'🥀',type:'번아웃 위험형',subtitle:'지금 당장 쉬어야 해요',teaser:'이미 빨간불이 켜진 상태! 지금 몸과 마음이 SOS 신호를 보내고 있어요. 꼭 쉬어야 해요.',traits:['과부하','예민함','피로 누적','자기비판','회복 필요'],full:'현재 멘탈과 체력이 한계에 다다른 상태일 수 있어요. 작은 일에도 예민하게 반응하고, 출근이 두렵거나 모든 게 의욕 없이 느껴진다면 번아웃의 신호예요. 이건 의지력이 약한 게 아니라 너무 열심히 살아온 결과예요. 지금 당장 진짜 쉬는 시간을 만들어야 해요. 연차를 쓰거나, 주말에 아무것도 하지 않거나, 전문가의 도움을 받는 것도 좋아요.',match:'지지해주는 가족·친구, 충분한 휴식',tip:'번아웃은 쉬면 낫는 게 아니라 원인을 찾아야 해요 — 지금 직장에서 무엇이 가장 힘든지 적어보세요'}
 };
 
 var S = {testIdx:null, qIdx:0, answers:[], result:null};
@@ -573,7 +619,7 @@ function shareResult() {
   var r=S.result, tName=TESTS[S.testIdx].name;
   // URL 파라미터에 결과 포함
   var url = new URL(window.location.href);
-  var typeCollections2 = [MBTI, TETO, AURA, LOVE, HSP, WORK, HEALING];
+  var typeCollections2 = [MBTI, TETO, AURA, LOVE, HSP, WORK, HEALING, MENTAL];
   var tc2 = typeCollections2[S.testIdx];
   var rKey2 = r.type;
   if(tc2) { for(var k2 in tc2) { if(tc2[k2] === r || tc2[k2].type === r.type) { rKey2 = k2; break; } } }
@@ -617,7 +663,7 @@ renderHome();
   if(t === null || rKey === null) return;
   var tIdx = parseInt(t);
   if(isNaN(tIdx) || tIdx < 0 || tIdx >= TESTS.length) return;
-  var typeCollections = [MBTI, TETO, AURA, LOVE, HSP, WORK, HEALING];
+  var typeCollections = [MBTI, TETO, AURA, LOVE, HSP, WORK, HEALING, MENTAL];
   var tc = typeCollections[tIdx];
   if(!tc) return;
   var foundResult = tc[rKey] || null;
