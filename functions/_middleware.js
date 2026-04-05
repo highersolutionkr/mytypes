@@ -8,32 +8,32 @@ const TYPE_COLLECTIONS = [
   { rest:{type:'완전 휴식형',subtitle:'아무것도 안 하는 게 최고의 힐링'}, social:{type:'사람 충전형',subtitle:'사람이 나의 에너지원!'}, active:{type:'액티브 활동형',subtitle:'몸을 움직여야 풀린다!'}, sensory:{type:'감각 충전형',subtitle:'오감으로 즐기는 힐링'}, escape:{type:'일탈 탈출형',subtitle:'새로운 곳에서 리셋!'} },
   { ironmental:{type:'철벽 멘탈형',subtitle:'어지간한 건 다 씹어먹는다'}, hidden:{type:'속앓이 참을인형',subtitle:'밖에선 웃고 안에서 삭힌다'}, honest:{type:'직언 솔직형',subtitle:'할 말은 하고 살아야 직성이 풀린다'}, burnout:{type:'번아웃 위험형',subtitle:'지금 당장 쉬어야 해요'} },
 ];
-
+ 
 const BOT_UA = ["kakaotalk","facebookexternalhit","twitterbot","slackbot","linkedinbot","discordbot","telegrambot","whatsapp","googlebot","bingbot","yeti","naverbot","daumoa","applebot","iframely","opengraph"];
-
+ 
 export async function onRequest(context) {
   const request = context.request;
   const ua = (request.headers.get("user-agent") || "").toLowerCase();
   const isBot = BOT_UA.some(b => ua.includes(b));
-
+ 
   if (!isBot) return context.next();
-
+ 
   const url = new URL(request.url);
   const t = url.searchParams.get("t");
   const r = url.searchParams.get("r");
-
+ 
   if (t === null || r === null) return context.next();
-
+ 
   const tIdx = parseInt(t);
   if (isNaN(tIdx) || tIdx < 0 || tIdx >= TYPE_COLLECTIONS.length) return context.next();
-
+ 
   const result = TYPE_COLLECTIONS[tIdx][r];
   if (!result) return context.next();
-
+ 
   const ogTitle = `나는 "${result.type}" | 마이타입`;
   const ogDesc = `${result.subtitle} - 나도 테스트해보기!`;
   const ogImage = `https://mytypes.co.kr/og-image.png`;
-
+ 
   return new Response(`<!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -59,3 +59,4 @@ export async function onRequest(context) {
     headers: { "Content-Type": "text/html;charset=UTF-8", "Cache-Control": "public,max-age=3600" }
   });
 }
+ 
