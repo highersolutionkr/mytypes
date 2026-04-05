@@ -32,7 +32,7 @@ export async function onRequest(context) {
  
   const ogTitle = `나는 "${result.type}" | 마이타입`;
   const ogDesc = `${result.subtitle} - 나도 테스트해보기!`;
-  const ogImage = `https://mytypes.co.kr/og-image.png`;
+  const ogImage = `https://mytypes.co.kr/og-image-v2.png`;
  
   return new Response(`<!DOCTYPE html>
 <html lang="ko">
