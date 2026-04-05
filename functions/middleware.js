@@ -59,4 +59,3 @@ export async function onRequest(context) {
     headers: { "Content-Type": "text/html;charset=UTF-8", "Cache-Control": "public,max-age=3600" }
   });
 }
- 
